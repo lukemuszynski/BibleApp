@@ -1,0 +1,81 @@
+<mat-card>
+  <mat-tab-group [(selectedIndex)]="selectedTabIndex">
+    <mat-tab label="Tekst">
+      <div *ngIf="selectedTabIndex == 0">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>{{book.BookFullName}}</mat-card-title>
+            <mat-card-subtitle>{{book.BookName}}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p *ngFor="let passage of book.Passages">
+              <strong>{{passage.PassageNumber}}</strong> {{passage.PassageText}}
+            </p>
+          </mat-card-content>
+          <mat-action-row>
+            <button mat-button color="warn" [disabled]="book.PreviousBookGuid == '00000000-0000-0000-0000-000000000000'" routerLink="/Book/{{book.PreviousBookGuid}}">Poprzedni</button>
+            <button mat-button color="primary" [disabled]="book.NextBookGuid == '00000000-0000-0000-0000-000000000000'" routerLink="/Book/{{book.NextBookGuid}}">Następny</button>
+          </mat-action-row>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Komentarze">
+
+      <div *ngIf="selectedTabIndex == 1">
+
+        <!-- <mat-list>
+          <mat-list-item *ngFor="let comment of book.Comments">
+            <img matListAvatar src="https://img.youtube.com/vi/{{comment.Url}}/sddefault.jpg" alt="{{comment.Url}}">
+            <a matLine href="https://img.youtube.com/vi/{{comment.Url}}/sddefault.jpg">
+            </a>
+            <h3 > {{comment.Title}} </h3>
+            <p matLine>
+              <span>{{book.BookName}} {{comment.StartIndex}}, {{comment.EndIndex}}</span>
+            </p>
+          </mat-list-item>
+        </mat-list> -->
+
+        <app-comment-section [book]="book"></app-comment-section>
+
+      </div>
+
+    </mat-tab>
+    <mat-tab label="Dodaj komentarz">
+      <div *ngIf="selectedTabIndex == 2" class="example-container">
+        <mat-card>
+          <div class='example-form'>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Tytuł" [(ngModel)]="newComment.Title">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Url" [(ngModel)]="newComment.Url">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <textarea matInput placeholder="Opis" [(ngModel)]="newComment.Text"></textarea>
+            </mat-form-field>
+
+            <!-- <form> -->
+            <div>Wersety: </div>
+            <mat-form-field>
+              <input matInput [disabled]='wholeBookComment' type="number" placeholder="Od" [(ngModel)]="newComment.StartIndex">
+            </mat-form-field>
+
+            <mat-form-field>
+              <input matInput [disabled]='wholeBookComment' type="number" placeholder="Do" [(ngModel)]="newComment.EndIndex">
+            </mat-form-field>
+
+            <mat-checkbox [(ngModel)]="wholeBookComment">Cała księga</mat-checkbox>
+
+          </div>
+          <mat-action-row>
+            <button mat-button color="warn" (click)="cleanComment()">Wyczyść</button>
+            <button mat-button color="primary" (click)="addComment()">Dodaj komentarz</button>
+          </mat-action-row>
+
+        </mat-card>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+</mat-card>

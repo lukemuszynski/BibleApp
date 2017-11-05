@@ -1,0 +1,29 @@
+.example-headers-align .mat-expansion-panel-header-title,
+.example-headers-align .mat-expansion-panel-header-description {
+  flex-basis: 0;
+  
+}
+
+.example-headers-align .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  // text-overflow: ellipsis;
+  align-items: right ;
+}
+
+
+.example-form {
+  min-width: 150px;
+  max-width: 1000px;
+  width: 90%;
+}
+
+.example-full-width {
+  width: 90%;
+}
+
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+}
+

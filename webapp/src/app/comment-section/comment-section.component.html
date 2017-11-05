@@ -1,0 +1,39 @@
+
+    <mat-expansion-panel *ngFor="let comment of book.Comments" [expanded]="step === comment.Guid" (opened)="setStep(comment.Guid)"
+        hideToggle="false">
+        <mat-expansion-panel-header [collapsedHeight]="auto" class="padding:10px; ">
+            <mat-panel-title>
+                <div class="header">
+                    <div class="header-title">{{book.BookName}} : {{comment.StartIndex}}, {{comment.EndIndex}}</div>
+                    <div class="header-description">{{comment.Title}}</div>
+                </div>
+            </mat-panel-title>
+            <!-- <mat-panel-description> -->
+
+            <!-- </mat-panel-description> -->
+        </mat-expansion-panel-header>
+
+
+        <mat-grid-list cols="1" rowHeight="160px">
+            <mat-grid-tile [colspan]="1">
+                <a href="{{getUrl(comment)}}" target="_blank">
+                    <img src="https://img.youtube.com/vi/{{comment.Url}}/sddefault.jpg" alt="{{comment.Url}}" height="160" width="240">
+                </a>
+            </mat-grid-tile>
+
+            <mat-grid-tile [colspan]="1" *ngIf="comment.Text && comment.Text!=''">
+                {{comment.Text}}
+            </mat-grid-tile>
+
+        </mat-grid-list>
+
+        <mat-action-row>
+            <button mat-button color="primary">Udostępnij</button>
+            <a mat-button color="primary" href="{{getUrl(comment)}}" target="_blank">
+                Otwórz
+                <i class="fa fa-youtube fa-2x" aria-hidden="true"></i>
+            </a>
+        </mat-action-row>
+
+    </mat-expansion-panel>
+
