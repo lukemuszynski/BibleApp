@@ -56,7 +56,7 @@ export class AppComponent implements OnInit {
 
   prepareBooksSidenav(booksObjects: Book[]) {
     this.booksObjects = booksObjects;
-    booksObjects.forEach(x => x.Subbooks.sort((y, z) => y.BookGlobalNumber - z.BookGlobalNumber));
+    booksObjects.forEach(x => x.Subbooks.sort((y, z) => y.SubbookNumber - z.SubbookNumber));
     booksObjects.sort((x, y) => x.StartGlobalIndex - y.StartGlobalIndex);
     console.log(this.booksObjects);
   }

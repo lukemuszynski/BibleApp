@@ -14,6 +14,10 @@ namespace BibliaApp
             public Guid BookGuid { get; set; }
             public int PassageNumber { get; set; }
 
+            public string Title1 { get; set; }
+            public string Title2 { get; set; }
+            public string Meantitle1 { get; set; }
+            public string Meantitle2 { get; set; }
             public PassageDomainObject()
             {
                 

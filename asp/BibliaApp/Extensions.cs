@@ -9,6 +9,8 @@ namespace BibliaApp
             int lengthToMove = start.Length;
             int indexOfBookShortName =
                 data.IndexOf(start);
+            if (indexOfBookShortName < 0)
+                return "";
             indexOfBookShortName += lengthToMove;
             int indexOfEndTitle = data.IndexOf(end, indexOfBookShortName);
             if (indexOfEndTitle == -1)
@@ -21,6 +23,24 @@ namespace BibliaApp
             if (indexOfEndTitle - indexOfBookShortName <= 0)
                 return "";
             return data.Substring(indexOfBookShortName, indexOfEndTitle - indexOfBookShortName);
+        }
+
+        public static string RemoveWithInternal(this string data, string start, string end)
+        {
+            int lengthToMove = start.Length;
+
+            int startIndex =
+                data.IndexOf(start);
+
+            if (startIndex == -1)
+                return data;
+
+            int endIndex =
+               data.IndexOf(end, startIndex + start.Length);
+            if (endIndex == -1)
+                return data;
+            endIndex += end.Length;
+            return endIndex - startIndex > 0 ? data.Remove(startIndex, endIndex - startIndex) : data;
         }
 
         public static Guid GenerateComb(this Guid g)

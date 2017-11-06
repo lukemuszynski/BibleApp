@@ -1,3 +1,4 @@
+import { CommentDomainObject } from './CommentDomainObject';
 import { PassageDomainObject } from './PassageDomainObject';
 
 export class BookExtendedDomainObject {
@@ -9,4 +10,5 @@ export class BookExtendedDomainObject {
       BookGlobalNumber: number;
       NextBookGuid: string;
       PreviousBookGuid: string;
+      Comments: CommentDomainObject[];
 }

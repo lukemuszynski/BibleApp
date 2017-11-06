@@ -8,4 +8,5 @@ export class CommentDomainObject {
     StartIndex: String;
     EndIndex: String;
     BookGuid: String;
+    ManageCommentKeyGuid: String;
 }

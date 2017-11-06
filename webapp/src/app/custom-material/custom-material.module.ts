@@ -12,7 +12,7 @@ import { MatNativeDateModule } from '@angular/material';
 import { MatTabsModule } from '@angular/material';
 import { MatCardModule } from '@angular/material';
 import { MatGridListModule } from '@angular/material';
-import { MatFormFieldModule, MatSelectModule } from '@angular/material';
+import { MatFormFieldModule, MatSelectModule, MatSnackBarModule } from '@angular/material';
 @NgModule({
   imports: [
     MatButtonModule,
@@ -32,7 +32,8 @@ import { MatFormFieldModule, MatSelectModule } from '@angular/material';
     MatCardModule,
     MatGridListModule,
     MatFormFieldModule,
-    MatSelectModule
+    MatSelectModule,
+    MatSnackBarModule
   ],
   exports: [
     BrowserAnimationsModule,
@@ -53,7 +54,8 @@ import { MatFormFieldModule, MatSelectModule } from '@angular/material';
     MatCardModule,
     MatGridListModule,
     MatFormFieldModule,
-    MatSelectModule
+    MatSelectModule,
+    MatSnackBarModule
   ],
   declarations: []
 })

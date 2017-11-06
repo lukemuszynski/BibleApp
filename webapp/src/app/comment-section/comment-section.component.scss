@@ -1,16 +1,29 @@
-:not(.mat-expanded) { padding-bottom :10px; padding-top :10px; }
-.mat-expanded { padding-bottom :10px; padding-top :10px; }
-
-div.header{
- padding: 0px;
+:not(.mat-expanded).mat-expansion-panel {
+  padding-bottom: 10px;
+  padding-top: 10px;
 }
 
-div.header-title{
-    padding: 0px;
-    
-   }
+.mat-expanded {
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
 
-   div.header-description{
+div.header {
+  padding: 0px;
+}
+
+div.header-title {
+  padding: 0px;
+}
+
+div.header-description {
+  padding: 0px;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+i.header-icon {
+    align-self: left;
     padding: 0px;
     color: rgba(0, 0, 0, 0.54);
-   }
+  }
+  

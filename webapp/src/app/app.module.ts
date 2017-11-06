@@ -9,7 +9,7 @@ import { BookContentComponent } from './book-content/book-content.component';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommentSectionComponent } from './comment-section/comment-section.component';
-
+import { ClipboardModule } from 'ngx-clipboard';
 const appRoutes: Routes = [
   { path: 'Book/:guid',      component: BookContentComponent },
   { path: '',
@@ -32,7 +32,8 @@ const appRoutes: Routes = [
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true } // <-- debugging purposes only
-    )
+    ),
+    ClipboardModule
   ],
   providers: [BookService],
   bootstrap: [AppComponent]

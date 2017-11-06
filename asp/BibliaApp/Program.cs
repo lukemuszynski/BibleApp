@@ -19,8 +19,25 @@ namespace BibliaApp
 
         static void Main(string[] args)
         {
-            //SetGlobalNumber();
-            SetNextPreviousBooks();
+
+            //ScrapeTitleAndMeantitle();
+            UpdateBooks();
+
+        }
+
+        private static void UpdateBooks()
+        {
+            using (ApplicationDbContext dbContext = new ApplicationDbContext())
+            {
+                var books = dbContext.BooksExtended.ToList();
+                foreach (var book in books)
+                {
+                    book.Passages = dbContext.Passages.Where(x => x.BookGuid == book.Guid).ToList();
+                    book.BeforeSave();
+                }
+                dbContext.SaveChanges();
+            }
+
         }
 
         private static void SetNextPreviousBooks()
@@ -32,8 +49,8 @@ namespace BibliaApp
                 foreach (var bookExtendedDomainObject in books)
                 {
                     var previousBook = books
-                        .FirstOrDefault(x => 
-                                             x.BookGlobalNumber == bookExtendedDomainObject.BookGlobalNumber - 1);
+                        .FirstOrDefault(x => x.BookFullName == bookExtendedDomainObject.BookFullName &&
+                                             x.SubbookNumber == bookExtendedDomainObject.SubbookNumber - 1);
 
                     if (previousBook != null)
                         bookExtendedDomainObject.PreviousBookGuid = previousBook.Guid;
@@ -41,13 +58,39 @@ namespace BibliaApp
                     if (previousBook == null)
                         bookExtendedDomainObject.PreviousBookGuid = Guid.Empty;
 
-
                     var nextBook = books
-                        .FirstOrDefault(x => 
-                                             x.BookGlobalNumber == bookExtendedDomainObject.BookGlobalNumber + 1);
+                        .FirstOrDefault(x => x.BookFullName == bookExtendedDomainObject.BookFullName &&
+                                             x.SubbookNumber == bookExtendedDomainObject.SubbookNumber + 1);
 
                     if (nextBook != null)
                         bookExtendedDomainObject.NextBookGuid = nextBook.Guid;
+                }
+                dbContext.SaveChanges();
+            }
+        }
+
+        private static void ScrapeTitleAndMeantitle()
+        {
+            using (var dbContext = new ApplicationDbContext())
+            {
+                var passageList = dbContext.Passages.ToList();
+                foreach (var passageDomainObject in passageList)
+                {
+                    //passageDomainObject.Title2 = passageDomainObject.PassageText.FindInternalOf("<br><div class=tytul2>", "</div>");
+                    passageDomainObject.PassageText =
+                        passageDomainObject.PassageText.RemoveWithInternal("<br><div class=tytul2>", "</div>");
+
+                    //passageDomainObject.Title1 = passageDomainObject.PassageText.FindInternalOf("<br><div class=tytul1>", "</div>");
+                    passageDomainObject.PassageText =
+                        passageDomainObject.PassageText.RemoveWithInternal("<br><div class=tytul1>", "</div>");
+
+                    //passageDomainObject.Meantitle1 = passageDomainObject.PassageText.FindInternalOf("<br><div class=miedzytytul1>", "</div>");
+                    passageDomainObject.PassageText =
+                        passageDomainObject.PassageText.RemoveWithInternal("<br><div class=miedzytytul1>", "</div>");
+
+                    //passageDomainObject.Meantitle2 = passageDomainObject.PassageText.FindInternalOf("<br><div class=miedzytytul2>", "</div>");
+                    passageDomainObject.PassageText =
+                        passageDomainObject.PassageText.RemoveWithInternal("<br><div class=miedzytytul2>", "</div>");
                 }
                 dbContext.SaveChanges();
             }
@@ -72,12 +115,12 @@ namespace BibliaApp
                     int ostatnia = book.BookName[book.BookName.Length - 1] - 48;
                     int przedostatnia = book.BookName[book.BookName.Length - 2] - 48;
 
-                    book.SubbookNumber = przedostatnia < 10 && przedostatnia >= 0 ? przedostatnia*10 + ostatnia : ostatnia;
+                    book.SubbookNumber = przedostatnia < 10 && przedostatnia >= 0 ? przedostatnia * 10 + ostatnia : ostatnia;
                     if (book.BookName.Length - 3 >= 0)
                     {
                         int przedostatnia2 = book.BookName[book.BookName.Length - 3] - 48;
                         if (przedostatnia2 >= 0 && przedostatnia2 < 10)
-                            book.SubbookNumber += przedostatnia2*100;
+                            book.SubbookNumber += przedostatnia2 * 100;
                     }
                 }
 
@@ -91,12 +134,12 @@ namespace BibliaApp
                     int ostatnia = book.BookName[book.BookName.Length - 1] - 48;
                     int przedostatnia = book.BookName[book.BookName.Length - 2] - 48;
 
-                    book.SubbookNumber = przedostatnia < 10 && przedostatnia >= 0 ? przedostatnia*10 + ostatnia : ostatnia;
+                    book.SubbookNumber = przedostatnia < 10 && przedostatnia >= 0 ? przedostatnia * 10 + ostatnia : ostatnia;
                     if (book.BookName.Length - 3 >= 0)
                     {
                         int przedostatnia2 = book.BookName[book.BookName.Length - 3] - 48;
                         if (przedostatnia2 >= 0 && przedostatnia2 < 10)
-                            book.SubbookNumber += przedostatnia2*100;
+                            book.SubbookNumber += przedostatnia2 * 100;
                     }
                     //book.OnRead();
                     //book.
@@ -128,7 +171,7 @@ namespace BibliaApp
                 dbCOntext.BooksExtended.ToList().ForEach(x =>
                 {
                     x.OnRead();
-                    x.Passages.ForEach(y => y.PassageText=y.PassageText.Replace('¡','Ś'));
+                    x.Passages.ForEach(y => y.PassageText = y.PassageText.Replace('¡', 'Ś'));
                     x.BeforeSave();
                 });
                 dbCOntext.Passages.ToList().ForEach(x => x.PassageText = x.PassageText.Replace('¡', 'Ś'));
@@ -204,7 +247,7 @@ namespace BibliaApp
                             {
                                 //int ostatnia = book.BookName[book.BookName.Length - 1] - 48;
                                 //int przedostatnia = book.BookName[book.BookName.Length - 2] - 48;
-                                
+
                                 //bookFromDb.SubbookNumber = przedostatnia < 48 && przedostatnia < 58 ? przedostatnia * 10 + ostatnia: ostatnia ;
                                 //if (book.BookName.Length - 3 >= 0)
                                 //{
@@ -329,7 +372,7 @@ namespace BibliaApp
                                 bookExtended.BookGlobalNumber = bookFromDb.BookGlobalNumber;
                                 bookExtended.SubbookNumber = bookFromDb.SubbookNumber;
                             }
-                      
+
                             try
                             {
                                 db.SaveChanges();

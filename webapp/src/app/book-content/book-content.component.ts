@@ -5,7 +5,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Book } from '../models/Book';
-import { FormBuilder, FormGroup } from "@angular/forms/forms";
+import { FormBuilder, FormGroup } from '@angular/forms/forms';
+import { MatSnackBar } from '@angular/material';
 @Component({
   selector: 'app-book-content',
   templateUrl: './book-content.component.html',
@@ -13,7 +14,8 @@ import { FormBuilder, FormGroup } from "@angular/forms/forms";
 })
 export class BookContentComponent implements OnInit {
 
-  constructor(private _bookService: BookService, private route: ActivatedRoute, private sanitizer: DomSanitizer) { }
+  constructor(private _bookService: BookService, private route: ActivatedRoute, private sanitizer: DomSanitizer,
+    public snackBar: MatSnackBar) { }
   private sub: any;
   private bookGuid: string;
   private book: BookExtendedDomainObject;
@@ -45,6 +47,15 @@ export class BookContentComponent implements OnInit {
       this.bookGuid = params['guid'];
       this.book = await this._bookService.getAllBookExtended(this.bookGuid);
       this.book.Passages.sort((a, b) => (a.PassageNumber - b.PassageNumber));
+      this.book.Comments.forEach(x => {
+        const ownerGuid = localStorage['comment' + x.Guid];
+
+        if (ownerGuid != null) {
+          x.ManageCommentKeyGuid = ownerGuid;
+        }
+
+
+      });
       console.log(this.book);
     });
 
@@ -67,19 +78,26 @@ export class BookContentComponent implements OnInit {
 
 
     this.newComment.BookGuid = this.bookGuid;
-    if(this.wholeBookComment)
-    {
-      this.newComment.StartIndex = "";
-      this.newComment.EndIndex = "";
+    if (this.wholeBookComment) {
+      this.newComment.StartIndex = '1';
+      this.newComment.EndIndex = this.book.Passages.length.toString();
     }
 
-    this._bookService.addComment(this.newComment);
+    const book = await this._bookService.addComment(this.newComment);
+    console.log(book);
+    this.book.Comments = book.Comments;
+    const addedComment = book.Comments.find(x => x.Title === this.newComment.Title);
+    localStorage['comment' + addedComment.Guid] = addedComment.ManageCommentKeyGuid;
+    this.cleanComment();
+    this.snackBar.open('Dodano komentarz', '', { duration: 2000});
   }
 
   cleanComment() {
     this.newComment = new CommentDomainObject();
-    this.newComment.Text = "";
-    this.newComment.Url = "";
-    this.newComment.Title = "";
+    this.newComment.Text = '';
+    this.newComment.Url = '';
+    this.newComment.Title = '';
+    this.newComment.EndIndex = '';
+    this.newComment.StartIndex = '';
   }
 }
