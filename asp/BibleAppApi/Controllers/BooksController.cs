@@ -40,26 +40,52 @@ namespace BibleAppApi.Controllers
         [Route("GetBooks")]
         public async Task<List<Book>> GetAllBooks()
         {
-            List<Book> result = new List<Book>();
-            List<BookDomainObject> bookDomainObjects;
+            try
+            {
+                List<Book> result = new List<Book>();
+                List<BookDomainObject> bookDomainObjects;
+
+                using (ApplicationDbContext dbContext = new ApplicationDbContext())
+                {
+                    bookDomainObjects = await dbContext.Books.ToListAsync();
+                }
+
+                var bookNames = bookDomainObjects.Select(x => x.BookFullName).Distinct().ToList();
+
+                bookNames.ForEach(bookFullName => result.Add(new Book()
+                {
+                    StartGlobalIndex =
+                        bookDomainObjects.Where(y => y.BookFullName == bookFullName)
+                            .Select(x => x.BookGlobalNumber)
+                            .Min(),
+                    BookFullName = bookFullName,
+                    Subbooks = bookDomainObjects.Where(y => y.BookFullName == bookFullName).ToList()
+                }));
+
+                return result;
+            }
+            catch (Exception exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("GetComments")]
+        public async Task<List<CommentDomainObject>> GetAllComments()
+        {
+
+            List<CommentDomainObject> comments;
 
             using (ApplicationDbContext dbContext = new ApplicationDbContext())
             {
-                bookDomainObjects = await dbContext.Books.ToListAsync();
+                comments = await dbContext.Comments.OrderByDescending(x => x.AddTime).ToListAsync();
             }
+            comments.ForEach(x => x.ManageCommentKeyGuid = Guid.Empty);
 
-            var bookNames = bookDomainObjects.Select(x => x.BookFullName).Distinct().ToList();
+            return comments;
 
-            bookNames.ForEach(bookFullName => result.Add(new Book()
-            {
-                StartGlobalIndex = bookDomainObjects.Where(y => y.BookFullName == bookFullName).Select(x => x.BookGlobalNumber).Min(),
-                BookFullName = bookFullName,
-                Subbooks = bookDomainObjects.Where(y => y.BookFullName == bookFullName).ToList()
-            }));
-
-            return result;
         }
-
 
         [HttpPost]
         [Route("AddComment")]
@@ -109,7 +135,7 @@ namespace BibleAppApi.Controllers
                     book.Comments = dbContext.Comments.Where(x => x.BookGuid == book.Guid).ToList();
                 }
             }
-            
+
             return book;
         }
 
@@ -130,7 +156,6 @@ namespace BibleAppApi.Controllers
                 }
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
-            
         }
 
     }

@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment.prod';
 import { BookDomainObject } from './../../models/BookDomainObject';
 import { BookExtendedDomainObject } from './../../models/BookExtendedDomainObject';
 import { Injectable } from '@angular/core';
@@ -10,13 +11,19 @@ export class BookService {
 
   constructor(private http: Http) { }
 
-  booksUrl = 'http://localhost:5544/api/Books/GetBooks';
-  bookUrl = 'http://localhost:5544/api/Books/GetBook/';
-  addCommentUrl = 'http://localhost:5544/api/Books/AddComment';
-  deleteCommentUrl = 'http://localhost:5544/api/Books/DeleteComment';
+  booksUrl = environment.apiUrl + 'api/Books/GetBooks';
+  bookUrl = environment.apiUrl + 'api/Books/GetBook/';
+  addCommentUrl = environment.apiUrl + 'api/Books/AddComment';
+  deleteCommentUrl = environment.apiUrl + 'api/Books/DeleteComment';
+  getCommentsListUrl = environment.apiUrl + 'api/Books/GetComments';
 
   async getAllBooks(): Promise<Book[]> {
     const response = await this.http.get(this.booksUrl).toPromise();
+    return response.json();
+  }
+
+  async getComments(): Promise<CommentDomainObject[]> {
+    const response = await this.http.get(this.getCommentsListUrl).toPromise();
     return response.json();
   }
 

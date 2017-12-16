@@ -10,19 +10,27 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommentSectionComponent } from './comment-section/comment-section.component';
 import { ClipboardModule } from 'ngx-clipboard';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { CommentListComponent } from './comment-list/comment-list.component';
 const appRoutes: Routes = [
-  { path: 'Book/:guid',      component: BookContentComponent },
-  { path: '',
-    redirectTo: '/',
+  {
+    path: 'Book/:guid',
+    component: BookContentComponent
+  },
+  {
+    path: '',
+    component: CommentListComponent,
     pathMatch: 'full'
   }
+
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
     BookContentComponent,
-    CommentSectionComponent
+    CommentSectionComponent,
+    CommentListComponent
   ],
   imports: [
     CustomMaterialModule,
@@ -31,9 +39,10 @@ const appRoutes: Routes = [
     FormsModule,
     RouterModule.forRoot(
       appRoutes,
-      { enableTracing: true } // <-- debugging purposes only
+      { enableTracing: true, useHash: true } // <-- debugging purposes only
     ),
-    ClipboardModule
+    ClipboardModule,
+    Ng2SearchPipeModule
   ],
   providers: [BookService],
   bootstrap: [AppComponent]

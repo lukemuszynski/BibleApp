@@ -9,9 +9,14 @@ namespace BibliaApp
     {
         const string ConnectionString = "Data Source=CMVWR72;Initial Catalog=BibliaApp.Program+ApplicationDbContext;Integrated Security=True;Connect Timeout=15;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
-        private const string ConnectionStringHome =
+        public const string ConnectionStringHome =
             "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=BibliaApp.Program+ApplicationDbContext;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-        public ApplicationDbContext() : base(ConnectionStringHome)
+
+
+        public const string ConnectionString002 =
+            "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=BibleApp02;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+
+        public ApplicationDbContext() : base(ConnectionString002)
         {
 
         }

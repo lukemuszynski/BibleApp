@@ -1,0 +1,45 @@
+<mat-expansion-panel *ngFor="let comment of comments" [expanded]="step === comment.Guid" (opened)="setStep(comment.Guid)"
+  hideToggle="false">
+  <mat-expansion-panel-header [collapsedHeight]="auto" class="padding:10px; ">
+    <mat-panel-title>
+      <div class="header">
+        <!-- <div class="header-title">{{book.BookName}} : {{comment.StartIndex}}, {{comment.EndIndex}}</div> -->
+        <div class="header-description">{{comment.Title}}</div>
+      </div>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+
+
+  <a *ngIf="comment.IsYoutubeVideo" href="{{getUrl(comment)}}" target="_blank">
+
+    <img style="float:left; width:10%; padding-bottom: 10px; padding-right: 10px" src="https://img.youtube.com/vi/{{comment.Url}}/sddefault.jpg"
+      alt="{{comment.Url}}">
+
+  </a>
+
+  <div style='float:none; ' *ngIf="comment.Text && comment.Text!=''">
+    {{comment.Text}}
+  </div>
+
+
+  <mat-action-row>
+    <button mat-button *ngIf="comment.ManageCommentKeyGuid != null && comment.ManageCommentKeyGuid != '00000000-0000-0000-0000-000000000000'"
+      color='warn' (click)="deleteComment(comment)">Usuń</button>
+
+    <button ngxClipboard [cbContent]="getUrl(comment)" mat-button color="primary" (click)="snackBar.open('Skopiowano do schowka','',{duration: 2000})">Kopiuj link</button>
+    <a mat-button color="primary" href="{{getUrl(comment)}}" *ngIf="comment.IsYoutubeVideo" target="_blank">
+      Otwórz
+      <i class="fa fa-youtube fa-2x" aria-hidden="true"></i>
+    </a>
+    <a mat-button color="primary" href="{{getUrl(comment)}}" *ngIf="comment.IsAudioFile" target="_blank">
+      Otwórz
+      <i class="fa fa-soundcloud fa-2x" aria-hidden="true"></i>
+    </a>
+
+    <button mat-button color="primary" routerLink="/Book/{{comment.BookGuid}}">
+      Otwórz pismo
+    </button>
+
+  </mat-action-row>
+
+</mat-expansion-panel>

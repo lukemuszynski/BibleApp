@@ -1,8 +1,19 @@
 <mat-sidenav-container>
   <mat-sidenav #sidenav class="sidenav">
 
-    <mat-accordion class="example-headers-align">
-      <mat-expansion-panel *ngFor="let book of booksObjects" (opened)="setStep(0)" hideToggle="true">
+    <mat-accordion class="example-headers-align" *ngIf="booksObjects">
+
+      <mat-card>
+        <mat-form-field class="example-full-width">
+          <input matInput type="text" placeholder="Szukaj" [(ngModel)]="term">
+          <button mat-button *ngIf="term" matSuffix mat-icon-button aria-label="Clear" (click)="term=''">
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+      </mat-card>
+
+      <mat-expansion-panel *ngFor="let book of booksObjects | filter:term" (opened)="setStep(0)" hideToggle="true">
         <mat-expansion-panel-header>
           <mat-panel-title>
             {{book.BookFullName}}
@@ -30,8 +41,10 @@
       </button>
       <span>{{title}}</span>
       <span class="fill-remaining-space">
-
       </span>
+      <button mat-button routerLink="">
+        Komentarze
+      </button>
       <!-- <span>
         <form>
           <mat-form-field floatPlaceholder="never">
@@ -42,9 +55,9 @@
     </mat-toolbar>
 
     <router-outlet></router-outlet>
- <mat-action-row>
-    <!--<button mat-button color="warn" [disabled]="!selectedBook.PreviousBook">Poprzedni</button>-->
-    <!--<button mat-button color="primary" [disabled]="!selectedBook.NextBook">Następny</button>-->
-  </mat-action-row>
+    <mat-action-row>
+      <!--<button mat-button color="warn" [disabled]="!selectedBook.PreviousBook">Poprzedni</button>-->
+      <!--<button mat-button color="primary" [disabled]="!selectedBook.NextBook">Następny</button>-->
+    </mat-action-row>
   </div>
 </mat-sidenav-container>

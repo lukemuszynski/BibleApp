@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
 
   currentStep: String = 'book';
   step = 0;
-
+  term = '';
   bookService: BookService;
   @ViewChild('sidenav')
   private matSidenav: MatSidenav;
