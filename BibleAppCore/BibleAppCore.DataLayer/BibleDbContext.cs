@@ -1,39 +1,34 @@
+﻿using BibliaApp;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity;
-using System.Threading.Tasks;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
 
-namespace BibliaApp
+namespace BibleAppCore.DataLayer
 {
-
-    public class ApplicationDbContext : DbContext
+    public class BibleDbContext : DbContext
     {
-        const string ConnectionString = "Data Source=CMVWR72;Initial Catalog=BibliaApp.Program+ApplicationDbContext;Integrated Security=True;Connect Timeout=15;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
-        public const string ConnectionStringHome =
-            "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=BibliaApp.Program+ApplicationDbContext;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-
-        public const string ConnectionString002 =
-            "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=BibleApp02;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-
-        public ApplicationDbContext() : base(ConnectionString002)
+        public BibleDbContext(DbContextOptions<BibleDbContext> options) : base(options)
         {
 
         }
 
-        public ApplicationDbContext(string connectionString) : base(connectionString)
-        {
-            
-        }
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<PassageDomainObject>()
-                .ToTable("dbo.Passage")
-                .HasKey(x => x.Guid)
-                .Property(x => x.Guid).HasDatabaseGeneratedOption(DatabaseGeneratedOption.None)
+                .HasKey(x => x.Guid);
+            modelBuilder.Entity<PassageDomainObject>()
+                .Property(p => p.Guid)
+                .ValueGeneratedNever()
                 .IsRequired();
             modelBuilder.Entity<PassageDomainObject>()
                 .Property(x => x.PassageText)
-                .IsRequired().HasMaxLength(null);
+                .IsRequired()
+                .HasMaxLength(8000);
             modelBuilder.Entity<PassageDomainObject>()
                 .Property(x => x.Book)
                 .IsRequired().HasMaxLength(50);
@@ -45,9 +40,11 @@ namespace BibliaApp
                 .IsRequired();
 
             modelBuilder.Entity<BookDomainObject>()
-                .ToTable("dbo.Book")
-                .HasKey(x => x.Guid)
-                .Property(x => x.Guid).HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+                .HasKey(x => x.Guid);
+            modelBuilder.Entity<BookDomainObject>()
+                .Property(x => x.Guid)
+                .ValueGeneratedNever()
+                .IsRequired();
             modelBuilder.Entity<BookDomainObject>()
                 .Property(x => x.BookName)
                 .IsRequired()
@@ -63,9 +60,12 @@ namespace BibliaApp
                 .IsRequired();
 
             modelBuilder.Entity<BookExtendedDomainObject>()
-                .ToTable("dbo.BookExtended")
-                .HasKey(x => x.Guid)
-                .Property(x => x.Guid).HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+                .HasKey(x => x.Guid);
+
+            modelBuilder.Entity<BookExtendedDomainObject>()
+                .Property(x => x.Guid)
+                .ValueGeneratedNever();
+
             modelBuilder.Entity<BookExtendedDomainObject>()
                 .Property(x => x.BookName)
                 .IsRequired()
@@ -73,11 +73,11 @@ namespace BibliaApp
             modelBuilder.Entity<BookExtendedDomainObject>()
                 .Property(x => x.PassagesJson)
                 .IsRequired()
-                .HasMaxLength(null);
+                .HasMaxLength(8000);
             modelBuilder.Entity<BookExtendedDomainObject>()
                 .Property(x => x.BookFullName)
                 .IsRequired()
-                .HasMaxLength(null);
+                .HasMaxLength(8000);
             modelBuilder.Entity<BookExtendedDomainObject>()
                 .Property(x => x.SubbookNumber)
                 .IsRequired();
@@ -93,9 +93,9 @@ namespace BibliaApp
 
 
             modelBuilder.Entity<CommentDomainObject>()
-                        .ToTable("dbo.Comment")
-                        .HasKey(x => x.Guid)
-                        .Property(x => x.Guid).HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+                        .HasKey(x => x.Guid);
+            modelBuilder.Entity<CommentDomainObject>().Property(x => x.Guid)
+                .ValueGeneratedNever();
             modelBuilder.Entity<CommentDomainObject>()
                 .Property(x => x.Title)
                 .IsRequired()
@@ -129,16 +129,10 @@ namespace BibliaApp
               .Property(x => x.ManageCommentKeyGuid)
               .IsRequired();
         }
-        
-
-        public virtual DbSet<PassageDomainObject> Passages { get; set; }
-        public virtual DbSet<BookDomainObject> Books { get; set; }
-        public virtual DbSet<BookExtendedDomainObject> BooksExtended { get; set; }
-        public virtual DbSet<CommentDomainObject> Comments { get; set; }
-
-        public async Task SaveChangesAsync()
-        {
-            await base.SaveChangesAsync();
-        }
+       
+        public DbSet<PassageDomainObject> Passages { get; set; }
+        public DbSet<BookDomainObject> Books { get; set; }
+        public DbSet<BookExtendedDomainObject> BooksExtended { get; set; }
+        public DbSet<CommentDomainObject> Comments { get; set; }
     }
 }

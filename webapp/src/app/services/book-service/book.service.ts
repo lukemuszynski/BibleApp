@@ -13,9 +13,9 @@ export class BookService {
 
   booksUrl = environment.apiUrl + 'api/Books/GetBooks';
   bookUrl = environment.apiUrl + 'api/Books/GetBook/';
-  addCommentUrl = environment.apiUrl + 'api/Books/AddComment';
-  deleteCommentUrl = environment.apiUrl + 'api/Books/DeleteComment';
-  getCommentsListUrl = environment.apiUrl + 'api/Books/GetComments';
+  addCommentUrl = environment.apiUrl + 'api/Comments/AddComment';
+  deleteCommentUrl = environment.apiUrl + 'api/Comments/DeleteComment';
+  getCommentsListUrl = environment.apiUrl + 'api/Comments/GetComments';
 
   async getAllBooks(): Promise<Book[]> {
     const response = await this.http.get(this.booksUrl).toPromise();

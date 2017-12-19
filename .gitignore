@@ -3,3 +3,12 @@ bin
 /asp/BibliaApp/obj
 packages
 /asp/.vs/BibliaApp/v14/.suo
+/BibleAppCore/.vs/BibleAppCore/v15
+/BibleAppCore/BibleAppCore/Properties/PublishProfiles/*.pubxml
+/asp/BibleAppApi/Properties/PublishProfiles/*.pubxml
+/BibleAppCore/BibleAppCore/Properties/PublishProfiles/*.user
+/asp/BibleAppApi/Properties/PublishProfiles/*.user
+/asp/BibleAppApi/App_Data/*.mdf
+/asp/BibleAppApi/App_Data/*.ldf
+/BibleAppCore/.vs/config/*.config
+/*.PublishSettings
