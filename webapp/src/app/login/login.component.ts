@@ -1,3 +1,4 @@
+import { AuthService } from './../services/auth-service/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { CustomMaterialModule } from '../custom-material/custom-material.module';
 
@@ -8,9 +9,10 @@ import { CustomMaterialModule } from '../custom-material/custom-material.module'
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
+    this.authService.hashPassword('passwordForMyMom');
   }
 
 }

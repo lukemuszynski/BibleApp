@@ -5,5 +5,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:5544/'
+  apiUrl: 'http://localhost:5544/',
+  passwordSalt: 'slatdsadasr23s!#^',
+  passwordHash: 'SHA-512',
+  passwordIterations: 1000
 };

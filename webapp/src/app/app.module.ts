@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { HttpModule } from '@angular/http';
 import { BookContentComponent } from './book-content/book-content.component';
 import { RouterModule, Routes } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommentSectionComponent } from './comment-section/comment-section.component';
 import { ClipboardModule } from 'ngx-clipboard';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
@@ -28,7 +28,6 @@ const appRoutes: Routes = [
   {
     path: 'Login',
     component: LoginComponent,
-    pathMatch: 'full'
   },
   {
     path: 'Register',
@@ -47,6 +46,7 @@ const appRoutes: Routes = [
   ],
   imports: [
     CustomMaterialModule,
+    ReactiveFormsModule,
     BrowserModule,
     HttpModule,
     FormsModule,

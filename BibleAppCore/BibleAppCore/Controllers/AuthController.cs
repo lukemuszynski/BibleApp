@@ -43,13 +43,13 @@ namespace BibleAppCore.Controllers
         public async Task<IActionResult> Register([FromBody]RegisterUserData registerUserData)
         {
             var newUser = Mapper.Map<User>(registerUserData);
-            registerUserData.Password = EncyptionProvider.HashPassword(registerUserData.Password);
+            registerUserData.Password = EncyptionProvider.HashPassword(newUser.Password);
             var repositoryResponse = await Repository.RegisterUser(newUser);
             if (!repositoryResponse.Successful)
                 return new BadRequestResult();
 
             BearerToken bearerToken = EncyptionProvider.CreateBearerToken(Mapper.Map<BearerToken>(repositoryResponse.Value));
-            return new JsonResult(bearerToken.Token);
+            return new JsonResult(bearerToken);
         }
 
     }

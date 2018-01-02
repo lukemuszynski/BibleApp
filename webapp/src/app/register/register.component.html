@@ -1,3 +1,48 @@
-<p>
-  register works!
-</p>
+<mat-card>
+  <form class="example-form">
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Email" [formControl]="emailFormControl" [errorStateMatcher]="matcher">
+      <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+        Proszę wprowadzić poprawny adres email.
+      </mat-error>
+      <mat-error *ngIf="emailFormControl.hasError('required')">
+        Email jest
+        <strong>wymagany</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Login" [formControl]="loginFormControl">
+      <mat-error *ngIf="loginFormControl.hasError('required')">
+        Login jest
+        <strong>wymagany</strong>
+      </mat-error>
+
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput type="password" placeholder="Hasło" [formControl]="passwordFormControl">
+      <mat-error *ngIf="passwordFormControl.hasError('required')">
+        Hasło jest
+        <strong>wymagane</strong>
+      </mat-error>
+      <mat-error *ngIf="passwordFormControl.hasError('minlength')">
+        Hasło musi mieć conajmniej
+        <strong>6 znaków</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput type="password" placeholder="Potwierdź hasło" [formControl]="passwordConfirmFormControl">
+      <mat-error *ngIf="passwordFormGroup.hasError('passNotMatch')">
+        Hasła się nie zgadzają
+      </mat-error>
+    </mat-form-field>
+
+    <mat-action-row>
+      <button mat-button (click)='sendRegistrationForm()' [disabled]='passwordFormGroup.invalid'>Zarejestruj</button>
+    </mat-action-row>
+
+  </form>
+
+</mat-card>

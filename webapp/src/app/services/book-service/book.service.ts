@@ -1,4 +1,5 @@
-import { environment } from './../../../environments/environment.prod';
+import { AuthService } from './../auth-service/auth.service';
+import { environment } from './../../../environments/environment';
 import { BookDomainObject } from './../../models/BookDomainObject';
 import { BookExtendedDomainObject } from './../../models/BookExtendedDomainObject';
 import { Injectable } from '@angular/core';
@@ -9,7 +10,7 @@ import { CommentDomainObject } from '../../models/CommentDomainObject';
 @Injectable()
 export class BookService {
 
-  constructor(private http: Http) { }
+  constructor(private http: Http, private authService: AuthService) { }
 
   booksUrl = environment.apiUrl + 'api/Books/GetBooks';
   bookUrl = environment.apiUrl + 'api/Books/GetBook/';
@@ -33,8 +34,8 @@ export class BookService {
   }
 
   async addComment(comment: CommentDomainObject): Promise<BookExtendedDomainObject> {
-
-    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const bearer = 'Bearer ' + this.authService.GetToken();
+    const headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': bearer });
     const options = new RequestOptions({ headers: headers });
     const response = await this.http.post(this.addCommentUrl, JSON.stringify(comment), options).toPromise();
     return response.json();
