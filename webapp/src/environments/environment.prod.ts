@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl:  'https://bibleappcore.azurewebsites.net/' // 'http://localhost:5544/'//
+  apiUrl:   'http://localhost:5544/' // 'https://bibleappcore.azurewebsites.net/'
 };

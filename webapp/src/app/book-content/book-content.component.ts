@@ -7,6 +7,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Book } from '../models/Book';
 import { FormBuilder, FormGroup } from '@angular/forms/forms';
 import { MatSnackBar } from '@angular/material';
+import { CustomMaterialModule } from '../custom-material/custom-material.module';
+
 @Component({
   selector: 'app-book-content',
   templateUrl: './book-content.component.html',

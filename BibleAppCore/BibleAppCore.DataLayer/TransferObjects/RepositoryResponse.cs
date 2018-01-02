@@ -26,7 +26,8 @@ namespace BibleAppCore.DataLayer.TransferObjects
         public enum RepositoryResponseMessageEnum
         {
             None,
-            NotFound
+            NotFound,
+            SaveException
         }
     }
 

@@ -2,6 +2,7 @@ import { MatSnackBar } from '@angular/material';
 import { BookService } from './../services/book-service/book.service';
 import { Component, OnInit } from '@angular/core';
 import { CommentDomainObject } from '../models/CommentDomainObject';
+import { CustomMaterialModule } from '../custom-material/custom-material.module';
 
 @Component({
   selector: 'app-comment-list',

@@ -1,10 +1,11 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using BibleAppCore.Utilities.ExtensionMethods;
 
 namespace BibliaApp
 {
         [Table("Passage")]
-        public class PassageDomainObject
+        internal class PassageDomainObject
         {
 
             public Guid Guid { get; set; }

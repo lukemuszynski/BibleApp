@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BibleAppCore.Contracts", "B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BibleAppTests", "BibleAppTests\BibleAppTests.csproj", "{1B7FB266-F281-4AB2-A74C-7C46979C6712}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BibleAppXUnit", "BibleAppXUnit\BibleAppXUnit.csproj", "{F376C7F2-CAEE-4455-B726-E763E3E40363}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{1B7FB266-F281-4AB2-A74C-7C46979C6712}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B7FB266-F281-4AB2-A74C-7C46979C6712}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B7FB266-F281-4AB2-A74C-7C46979C6712}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F376C7F2-CAEE-4455-B726-E763E3E40363}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F376C7F2-CAEE-4455-B726-E763E3E40363}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F376C7F2-CAEE-4455-B726-E763E3E40363}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F376C7F2-CAEE-4455-B726-E763E3E40363}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

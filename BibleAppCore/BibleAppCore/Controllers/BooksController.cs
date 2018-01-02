@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using BibleAppCore.Contracts.Contract.ViewModel;
 
 namespace BibleAppCore.Controllers
 {
@@ -22,12 +24,10 @@ namespace BibleAppCore.Controllers
         }
 
         [HttpGet("GetBook/{guid}")]
-        public async Task<BookExtendedDomainObject> GetBook(Guid guid)
+        public async Task<BookExtended> GetBook(Guid guid)
         {
 
-            BookExtendedDomainObject ret = await Repository.GetBookByGuid(guid);
-
-            ret.OnRead();
+            BookExtended ret = await Repository.GetBookByGuid(guid);
             return ret;
         }
 
@@ -38,18 +38,18 @@ namespace BibleAppCore.Controllers
             try
             {
                 List<Book> result = new List<Book>();
-                List<BookDomainObject> bookDomainObjects = await Repository.GetAllBooks();
+                List<Book> books = await Repository.GetAllBooks();
 
-                var bookNames = bookDomainObjects.Select(x => x.BookFullName).Distinct().ToList();
+                var bookNames = books.Select(x => x.BookFullName).Distinct().ToList();
 
                 bookNames.ForEach(bookFullName => result.Add(new Book()
                 {
                     StartGlobalIndex =
-                        bookDomainObjects.Where(y => y.BookFullName == bookFullName)
+                        books.Where(y => y.BookFullName == bookFullName)
                             .Select(x => x.BookGlobalNumber)
                             .Min(),
                     BookFullName = bookFullName,
-                    Subbooks = bookDomainObjects.Where(y => y.BookFullName == bookFullName).ToList()
+                    Subbooks = Mapper.Map<List<Subbook>>(books.Where(y => y.BookFullName == bookFullName).ToList())
                 }));
 
                 return result;

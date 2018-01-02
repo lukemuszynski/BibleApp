@@ -2,12 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using BibleAppCore.Contracts.Contract.ViewModel;
 
 
 namespace BibliaApp
 {
     [Table("BookExtended")]
-    public class BookExtendedDomainObject
+    internal class BookExtendedDomainObject
     {
         public Guid Guid { get; set; }
         public string BookName { get; set; }

@@ -5,7 +5,7 @@ namespace BibliaApp
 {
 
     [Table("Book")]
-    public class BookDomainObject
+    internal class BookDomainObject
     {
         public Guid Guid { get; set; }
         public string BookName { get; set; }

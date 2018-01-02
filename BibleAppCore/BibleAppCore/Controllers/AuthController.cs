@@ -7,6 +7,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using BibleAppCore.Contracts.Contract.Security;
+using BibleAppCore.Contracts.Contract.ViewModel;
+using BibliaApp;
 
 namespace BibleAppCore.Controllers
 {
@@ -14,22 +18,41 @@ namespace BibleAppCore.Controllers
     public class AuthController : Controller
     {
 
-        private IRepository Repository { get; set; }
+        private IAuthRepository Repository { get; set; }
         public IEncyptionProvider EncyptionProvider { get; set; }
 
-        public AuthController(IRepository repository, IEncyptionProvider encyptionProvider)
+        public AuthController(IAuthRepository repository, IEncyptionProvider encyptionProvider)
         {
             Repository = repository;
             EncyptionProvider = encyptionProvider;
         }
 
-        public async Task<BearerToken> Login(Credentials credentials)
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(Credentials credentials)
         {
-            credentials = EncyptionProvider.HashPassword(credentials);
-            BearerToken bearerToken = BearerToken.CreateBearerToken(credentials);
+            credentials.Password = EncyptionProvider.HashPassword(credentials.Password);
+            var repositoryResponse = await Repository.ValidateCredentails(credentials);
+            if (!repositoryResponse.Successful)
+                return new ForbidResult();
 
-            return bearerToken;
+            BearerToken bearerToken = EncyptionProvider.CreateBearerToken(Mapper.Map<BearerToken>(credentials));
+            return new JsonResult(bearerToken.Token);
+        }
+
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register([FromBody]RegisterUserData registerUserData)
+        {
+            var newUser = Mapper.Map<User>(registerUserData);
+            registerUserData.Password = EncyptionProvider.HashPassword(registerUserData.Password);
+            var repositoryResponse = await Repository.RegisterUser(newUser);
+            if (!repositoryResponse.Successful)
+                return new BadRequestResult();
+
+            BearerToken bearerToken = EncyptionProvider.CreateBearerToken(Mapper.Map<BearerToken>(repositoryResponse.Value));
+            return new JsonResult(bearerToken.Token);
         }
 
     }
+
+
 }

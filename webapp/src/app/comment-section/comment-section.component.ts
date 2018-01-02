@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Book } from '../models/Book';
 import { FormBuilder, FormGroup } from '@angular/forms/forms';
+import { CustomMaterialModule } from '../custom-material/custom-material.module';
 
 @Component({
     selector: 'app-comment-section',

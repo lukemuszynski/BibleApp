@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BibliaApp
 {
-    public class UserDomainObject
+    internal class UserDomainObject
     {
         public Guid Guid { get; set; }
         public string EmailAddress { get; set; }

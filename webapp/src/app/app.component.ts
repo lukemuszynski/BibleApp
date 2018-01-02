@@ -4,6 +4,7 @@ import { MatSidenavModule, MatSidenav } from '@angular/material';
 import { CustomMaterialModule } from './custom-material/custom-material.module';
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { Book } from './models/Book';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +21,6 @@ export class AppComponent implements OnInit {
   currentStep: String = 'book';
   step = 0;
   term = '';
-  bookService: BookService;
   @ViewChild('sidenav')
   private matSidenav: MatSidenav;
 
@@ -28,18 +28,36 @@ export class AppComponent implements OnInit {
   selectedBook: Book;
   selectedSubbook: BookDomainObject;
 
-  constructor(_bookService: BookService) {
-    this.bookService = _bookService;
+  constructor(private bookService: BookService, private route: ActivatedRoute) {
+
   }
 
   async ngOnInit() {
-    this.prepareBooksSidenav(await this.bookService.getAllBooks()); // .then( x => this.prepareBooksSidenav(x));
+    this.prepareBooksSidenav(await this.bookService.getAllBooks());
+
+    await this.route.params.subscribe(async params => {
+      const subbookGuid = params['guid'];
+      if (subbookGuid) {
+        this.booksObjects.find(x => {
+          const foundSubbook = x.Subbooks.find(y => y.Guid === subbookGuid);
+          if (foundSubbook !== undefined) {
+            this.selectedSubbook = foundSubbook;
+            this.selectedBook = x;
+            return true;
+          }
+        });
+      } else {
+        this.selectedSubbook = new BookDomainObject();
+        this.selectedSubbook.Guid = '0';
+      }
+    });
   }
 
   selectSubbook(book, subbook) {
     this.selectedBook = book;
     this.selectedSubbook = subbook;
     this.matSidenav.close();
+    console.log(subbook);
   }
 
   setStep(index: number) {
@@ -59,6 +77,18 @@ export class AppComponent implements OnInit {
     booksObjects.forEach(x => x.Subbooks.sort((y, z) => y.SubbookNumber - z.SubbookNumber));
     booksObjects.sort((x, y) => x.StartGlobalIndex - y.StartGlobalIndex);
     console.log(this.booksObjects);
+  }
+
+  getChipColor(subbook: BookDomainObject): string {
+    return subbook.Guid === this.selectedSubbook.Guid ? 'warn' : 'secondary';
+  }
+
+  getChipSelected(subbook: BookDomainObject): boolean {
+    // tslint:disable-next-line:curly
+    if (subbook.Guid === this.selectedSubbook.Guid)
+      console.log('FOUND');
+
+    return subbook.Guid === this.selectedSubbook.Guid;
   }
 
 }

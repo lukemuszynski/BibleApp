@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace BibliaApp
 {
     [Table("Comment")]
-    public class CommentDomainObject
+    internal class CommentDomainObject
     {
         public Guid Guid { get; set; }
         public string Url { get; set; }
@@ -17,6 +17,8 @@ namespace BibliaApp
         public Guid BookGuid { get; set; }
         public DateTime AddTime { get; set; }
         public Guid ManageCommentKeyGuid { get; set; }
+        public string UserLogin { get; set; }
+        public Guid UserGuid { get; set; }
     }
 
 }

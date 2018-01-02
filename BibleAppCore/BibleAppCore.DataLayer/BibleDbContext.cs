@@ -126,13 +126,49 @@ namespace BibleAppCore.DataLayer
                 .Property(x => x.AddTime)
                 .IsRequired();
             modelBuilder.Entity<CommentDomainObject>()
+                .Property(x => x.AddTime)
+                .HasDefaultValue(DateTime.MinValue);
+            modelBuilder.Entity<CommentDomainObject>()
               .Property(x => x.ManageCommentKeyGuid)
               .IsRequired();
+            modelBuilder.Entity<CommentDomainObject>()
+                .Property(x => x.UserGuid)
+                .IsRequired()
+                .HasDefaultValue(Guid.Empty);
+            modelBuilder.Entity<CommentDomainObject>()
+                .Property(x => x.UserLogin)
+                .IsRequired()
+                .HasDefaultValue("SYSTEM");
+
+            modelBuilder.Entity<UserDomainObject>()
+                .HasKey(x => x.Guid);
+            modelBuilder.Entity<UserDomainObject>()
+                .HasIndex(x => x.Login)
+                .IsUnique();
+            modelBuilder.Entity<UserDomainObject>()
+                .HasIndex(x => x.EmailAddress)
+                .IsUnique();
+            modelBuilder.Entity<UserDomainObject>().Property(x => x.Guid)
+                .ValueGeneratedNever();
+            modelBuilder.Entity<UserDomainObject>()
+                .Property(x => x.EmailAddress)
+                .IsRequired()
+                .HasMaxLength(500);
+            modelBuilder.Entity<UserDomainObject>()
+                .Property(x => x.Login)
+                .IsRequired()
+                .HasMaxLength(500);
+            modelBuilder.Entity<UserDomainObject>()
+                .Property(x => x.Password)
+                .IsRequired()
+                .HasMaxLength(500);
+           
         }
-       
-        public DbSet<PassageDomainObject> Passages { get; set; }
-        public DbSet<BookDomainObject> Books { get; set; }
-        public DbSet<BookExtendedDomainObject> BooksExtended { get; set; }
-        public DbSet<CommentDomainObject> Comments { get; set; }
+
+        internal DbSet<PassageDomainObject> Passages { get; set; }
+        internal DbSet<BookDomainObject> Books { get; set; }
+        internal DbSet<BookExtendedDomainObject> BooksExtended { get; set; }
+        internal DbSet<CommentDomainObject> Comments { get; set; }
+        internal DbSet<UserDomainObject> Users { get; set; }
     }
 }

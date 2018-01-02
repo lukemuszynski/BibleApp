@@ -6,6 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BibleAppCore.Contracts.Contract.ViewModel;
+using BibleAppCore.Utilities.ExtensionMethods;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BibleAppCore.Controllers
 {
@@ -20,10 +23,10 @@ namespace BibleAppCore.Controllers
         }
 
         [HttpGet("GetComments")]
-        public async Task<List<CommentDomainObject>> GetAllComments()
+        public async Task<List<Comment>> GetAllComments()
         {
 
-            List<CommentDomainObject> comments = await Repository.GetAllComments();
+            List<Comment> comments = await Repository.GetAllComments();
 
             comments.ForEach(x => x.ManageCommentKeyGuid = Guid.Empty);
 
@@ -31,9 +34,15 @@ namespace BibleAppCore.Controllers
 
         }
 
-        [HttpPost("AddComment")]
-        public async Task<BookExtendedDomainObject> AddComment([FromBody]CommentDomainObject comment)
+        [HttpPost("AddComment"), Authorize]
+        public async Task<BookExtended> AddComment([FromBody]Comment comment)
         {
+            
+            string login = User.Claims.FirstOrDefault(x => x.Type == "login")?.Value;
+            Guid guid = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "guid")?.Value);
+            comment.UserGuid = guid;
+            comment.UserLogin = login;
+            
             if (!string.IsNullOrEmpty(comment.Url))
             {
                 string urlToLower = comment.Url.ToLower();
@@ -65,18 +74,18 @@ namespace BibleAppCore.Controllers
                 comment.IsAudioFile = false;
             }
 
-            RepositoryResponse<BookExtendedDomainObject> repositoryResponse = await Repository.AddComment(comment);
+            RepositoryResponse<BookExtended> repositoryResponse = await Repository.AddComment(comment);
             if (repositoryResponse.Successful)
                 return repositoryResponse.Value;
 
             throw repositoryResponse.Exception;
         }
 
-        [HttpPost("DeleteComment")]
-        public async Task<StatusCodeResult> DeleteComment([FromBody]CommentDomainObject comment)
+        [HttpPost("DeleteComment"), Authorize]
+        public async Task<StatusCodeResult> DeleteComment([FromBody]Comment comment)
         {
-            RepositoryResponse<CommentDomainObject> repositoryResponse = await Repository.DeleteComment(comment);
-            if (repositoryResponse.RepositoryResponseMessage == RepositoryResponse<CommentDomainObject>.RepositoryResponseMessageEnum.NotFound)
+            RepositoryResponse<Comment> repositoryResponse = await Repository.DeleteComment(comment);
+            if (repositoryResponse.RepositoryResponseMessage == RepositoryResponse<Comment>.RepositoryResponseMessageEnum.NotFound)
                 return new NotFoundResult();
             else if (!repositoryResponse.Successful)
                 return new BadRequestResult();

@@ -2,7 +2,6 @@ import { BookService } from './services/book-service/book.service';
 import { CustomMaterialModule } from './custom-material/custom-material.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppComponent } from './app.component';
 import { HttpModule } from '@angular/http';
 import { BookContentComponent } from './book-content/book-content.component';
@@ -12,6 +11,10 @@ import { CommentSectionComponent } from './comment-section/comment-section.compo
 import { ClipboardModule } from 'ngx-clipboard';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { CommentListComponent } from './comment-list/comment-list.component';
+import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
+import { AuthService } from './services/auth-service/auth.service';
+
 const appRoutes: Routes = [
   {
     path: 'Book/:guid',
@@ -21,8 +24,16 @@ const appRoutes: Routes = [
     path: '',
     component: CommentListComponent,
     pathMatch: 'full'
+  },
+  {
+    path: 'Login',
+    component: LoginComponent,
+    pathMatch: 'full'
+  },
+  {
+    path: 'Register',
+    component: RegisterComponent
   }
-
 ];
 
 @NgModule({
@@ -30,7 +41,9 @@ const appRoutes: Routes = [
     AppComponent,
     BookContentComponent,
     CommentSectionComponent,
-    CommentListComponent
+    CommentListComponent,
+    RegisterComponent,
+    LoginComponent
   ],
   imports: [
     CustomMaterialModule,
@@ -44,7 +57,7 @@ const appRoutes: Routes = [
     ClipboardModule,
     Ng2SearchPipeModule
   ],
-  providers: [BookService],
+  providers: [BookService, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
