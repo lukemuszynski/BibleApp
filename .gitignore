@@ -12,3 +12,4 @@ packages
 /asp/BibleAppApi/App_Data/*.ldf
 /BibleAppCore/.vs/config/*.config
 /*.PublishSettings
+asp/pass.txt
