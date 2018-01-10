@@ -14,6 +14,8 @@ import { CommentListComponent } from './comment-list/comment-list.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { AuthService } from './services/auth-service/auth.service';
+import { AuthenticationComponent } from './authentication/authentication.component';
+import { NotificationsService } from './services/notifications-service/notifications.service';
 
 const appRoutes: Routes = [
   {
@@ -26,12 +28,16 @@ const appRoutes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'Login',
+    path: 'login',
     component: LoginComponent,
   },
   {
     path: 'Register',
     component: RegisterComponent
+  },
+  {
+    path: 'Authentication',
+    component: AuthenticationComponent
   }
 ];
 
@@ -42,7 +48,8 @@ const appRoutes: Routes = [
     CommentSectionComponent,
     CommentListComponent,
     RegisterComponent,
-    LoginComponent
+    LoginComponent,
+    AuthenticationComponent
   ],
   imports: [
     CustomMaterialModule,
@@ -57,7 +64,7 @@ const appRoutes: Routes = [
     ClipboardModule,
     Ng2SearchPipeModule
   ],
-  providers: [BookService, AuthService],
+  providers: [BookService, AuthService, NotificationsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

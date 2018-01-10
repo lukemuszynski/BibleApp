@@ -1,3 +1,4 @@
+import { AuthService } from './services/auth-service/auth.service';
 import { BookDomainObject } from './models/BookDomainObject';
 import { BookService } from './services/book-service/book.service';
 import { MatSidenavModule, MatSidenav } from '@angular/material';
@@ -28,7 +29,7 @@ export class AppComponent implements OnInit {
   selectedBook: Book;
   selectedSubbook: BookDomainObject;
 
-  constructor(private bookService: BookService, private route: ActivatedRoute) {
+  constructor(private bookService: BookService, private route: ActivatedRoute, private authService: AuthService) {
 
   }
 
@@ -91,4 +92,7 @@ export class AppComponent implements OnInit {
     return subbook.Guid === this.selectedSubbook.Guid;
   }
 
+  async logout() {
+    await this.authService.Logout();
+  }
 }

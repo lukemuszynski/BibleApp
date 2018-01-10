@@ -28,22 +28,22 @@ namespace BibleAppCore.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login(Credentials credentials)
+        public async Task<IActionResult> Login([FromBody]Credentials credentials)
         {
             credentials.Password = EncyptionProvider.HashPassword(credentials.Password);
             var repositoryResponse = await Repository.ValidateCredentails(credentials);
             if (!repositoryResponse.Successful)
                 return new ForbidResult();
 
-            BearerToken bearerToken = EncyptionProvider.CreateBearerToken(Mapper.Map<BearerToken>(credentials));
-            return new JsonResult(bearerToken.Token);
+            BearerToken bearerToken = EncyptionProvider.CreateBearerToken(Mapper.Map<BearerToken>(repositoryResponse.Value));
+            return new JsonResult(bearerToken);
         }
 
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody]RegisterUserData registerUserData)
         {
             var newUser = Mapper.Map<User>(registerUserData);
-            registerUserData.Password = EncyptionProvider.HashPassword(newUser.Password);
+            newUser.Password = EncyptionProvider.HashPassword(newUser.Password);
             var repositoryResponse = await Repository.RegisterUser(newUser);
             if (!repositoryResponse.Successful)
                 return new BadRequestResult();

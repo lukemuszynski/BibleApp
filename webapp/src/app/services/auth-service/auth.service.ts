@@ -4,6 +4,7 @@ import { RegisterUserData } from './../../models/RegisterUserData';
 import { environment } from './../../../environments/environment';
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import { Credentials } from '../../models/Credentials';
 
 
 @Injectable()
@@ -30,6 +31,16 @@ export class AuthService {
     const registerUrl = environment.apiUrl + 'api/Auth/Register';
     const res = await this.http.post(registerUrl, userData).toPromise();
     return await ServiceResponse.CreateServiceResponse<BearerToken>(res);
+  }
+
+  async Login(credentials: Credentials): Promise<ServiceResponse<BearerToken>> {
+    const loginUrl = environment.apiUrl + 'api/Auth/Login';
+    const res = await this.http.post(loginUrl, credentials).toPromise();
+    return await ServiceResponse.CreateServiceResponse<BearerToken>(res);
+  }
+
+  async Logout() {
+    localStorage.removeItem('token');
   }
 
   // https://stackoverflow.com/questions/40459020/angular-js-cryptography-pbkdf2-and-iteration/40468218#40468218
@@ -92,5 +103,6 @@ export class AuthService {
     }
     return byteString;
   }
+
 
 }
