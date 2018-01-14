@@ -1,7 +1,7 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MatCheckboxModule, MatButtonModule, MatChipsModule, MatSidenavModule,
-  MatListModule, MatToolbarModule, MatIconModule
+  MatListModule, MatToolbarModule, MatIconModule, MatTooltipModule
 } from '@angular/material';
 import { MatInputModule } from '@angular/material';
 import { NgModule } from '@angular/core';
@@ -39,7 +39,8 @@ import { MatSlideToggleModule } from '@angular/material';
     MatSelectModule,
     MatSnackBarModule,
     MatDialogModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatTooltipModule
   ],
   exports: [
     BrowserAnimationsModule,
@@ -63,7 +64,8 @@ import { MatSlideToggleModule } from '@angular/material';
     MatSelectModule,
     MatSnackBarModule,
     MatDialogModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatTooltipModule
   ],
   declarations: []
 })

@@ -1,23 +1,28 @@
-<mat-expansion-panel *ngFor="let comment of book.Comments" [expanded]="step === comment.Guid" (opened)="setStep(comment.Guid)"
-  hideToggle="false">
+<mat-expansion-panel *ngFor="let comment of book.Comments" [expanded]="step === comment.Guid" (opened)="setStep(comment.Guid)">
   <mat-expansion-panel-header [collapsedHeight]="auto" class="padding:10px; ">
     <mat-panel-title>
       <div class="header">
         <div class="header-title">{{book.BookName}} : {{comment.StartIndex}}, {{comment.EndIndex}}</div>
-        <div class="header-description">{{comment.Title}}</div>
+        <div class="header-description-custom">{{comment.Title}}
+          <i *ngIf="comment.IsYoutubeVideo" matTooltip="Youtube" class="fa fa-youtube-play youtube-icon-on-comment" aria-hidden="true"></i>
+          <i *ngIf="comment.IsAudioFile" matTooltip="Plik audio" class="fa fa-soundcloud youtube-icon-on-comment" aria-hidden="true"></i>
+          <i *ngIf="comment.UserGuid == authService.GetUserGuid()" matTooltip="Twój komentarz" class="fa fa-user-circle user-icon-on-comment"
+            aria-hidden="true"></i>
+        </div>
       </div>
     </mat-panel-title>
   </mat-expansion-panel-header>
 
 
   <a *ngIf="comment.IsYoutubeVideo" href="{{getUrl(comment)}}" target="_blank">
-  
-      <img style="float:left; width:30%; padding-bottom: 10px; padding-right: 10px" src="https://img.youtube.com/vi/{{comment.Url}}/sddefault.jpg" alt="{{comment.Url}}" >
+
+    <img style="float:left; width:30%; padding-bottom: 10px; padding-right: 10px" src="https://img.youtube.com/vi/{{comment.Url}}/sddefault.jpg"
+      alt="{{comment.Url}}">
 
   </a>
 
   <div style='float:none; ' *ngIf="comment.Text && comment.Text!=''">
-   {{comment.Text}} 
+    {{comment.Text}}
   </div>
 
 

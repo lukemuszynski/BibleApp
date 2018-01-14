@@ -1,3 +1,4 @@
+import { element } from 'protractor';
 import { AuthService } from './../auth-service/auth.service';
 import { environment } from './../../../environments/environment';
 import { BookDomainObject } from './../../models/BookDomainObject';
@@ -18,9 +19,12 @@ export class BookService {
   deleteCommentUrl = environment.apiUrl + 'api/Comments/DeleteComment';
   getCommentsListUrl = environment.apiUrl + 'api/Comments/GetComments';
 
+  private books: Book[] = [];
+
   async getAllBooks(): Promise<Book[]> {
     const response = await this.http.get(this.booksUrl).toPromise();
-    return response.json();
+    this.books = response.json();
+    return this.books;
   }
 
   async getComments(): Promise<CommentDomainObject[]> {
@@ -34,8 +38,19 @@ export class BookService {
     } else {
       request = this.http.get(this.getCommentsListUrl);
     }
-    const response = await request.toPromise();
-    return response.json();
+    const response = (await request.toPromise()).json();
+    // tslint:disable-next-line:no-shadowed-variable
+    response.forEach(element => {
+      this.books.find(x => {
+        const subBook = x.Subbooks.find(y => y.Guid === element.BookGuid);
+        if (subBook) {
+          element.BookName = subBook.BookName;
+          return true;
+        }
+        return false;
+      });
+    });
+    return response;
   }
 
   async getAllBookExtended(guid: string): Promise<BookExtendedDomainObject> {

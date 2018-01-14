@@ -23,8 +23,13 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
+  GetUserGuid(): String {
+    return localStorage.getItem('userGuid');
+  }
+
   SaveToken(bearerToken: BearerToken) {
     localStorage.setItem('token', bearerToken.Token);
+    localStorage.setItem('userGuid', bearerToken.Guid);
   }
 
   async Register(userData: RegisterUserData): Promise<ServiceResponse<BearerToken>> {

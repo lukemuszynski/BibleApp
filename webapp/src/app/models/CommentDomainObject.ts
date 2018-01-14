@@ -10,4 +10,7 @@ export class CommentDomainObject {
     BookGuid: String;
     ManageCommentKeyGuid: String;
     IsPrivate: boolean;
+    UserGuid: String;
+    UserLogin: String;
+    BookName: String;
 }

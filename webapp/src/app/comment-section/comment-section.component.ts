@@ -1,3 +1,4 @@
+import { AuthService } from './../services/auth-service/auth.service';
 import { MatSnackBar } from '@angular/material';
 import { CommentDomainObject } from './../models/CommentDomainObject';
 import { BookExtendedDomainObject } from './../models/BookExtendedDomainObject';
@@ -27,7 +28,7 @@ export class CommentSectionComponent implements OnInit {
 
 
     constructor(private _bookService: BookService, private route: ActivatedRoute,
-        private sanitizer: DomSanitizer, public snackBar: MatSnackBar) { }
+        private sanitizer: DomSanitizer, public snackBar: MatSnackBar, private authService: AuthService) { }
 
 
 
