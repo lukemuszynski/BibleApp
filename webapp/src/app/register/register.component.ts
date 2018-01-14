@@ -1,3 +1,4 @@
+import { AuthenticationComponent } from './../authentication/authentication.component';
 import { RegisterUserData } from './../models/RegisterUserData';
 import { AuthService } from './../services/auth-service/auth.service';
 import { Component, OnInit } from '@angular/core';
@@ -5,6 +6,7 @@ import { CustomMaterialModule } from '../custom-material/custom-material.module'
 import { Validators, FormControl, FormGroupDirective, NgForm, FormGroup } from '@angular/forms';
 
 import { ErrorStateMatcher } from '@angular/material/core';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -21,7 +23,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 export class RegisterComponent implements OnInit {
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private dialogRef: MatDialogRef<AuthenticationComponent>, private snackBar: MatSnackBar) { }
   hash = '';
 
   // https://www.jokecamp.com/blog/angular-whitespace-validator-directive/
@@ -79,6 +81,16 @@ export class RegisterComponent implements OnInit {
     const response = await this.authService.Register(model);
     if (response.Ok) {
       this.authService.SaveToken(response.Value);
+      this.snackBar.open('Zarejestrowano pomyślnie', '', { duration: 2000 });
+      this.dialogRef.close();
+    } else if (response.StatusMessage === 'EMAIL_IS_USED') {
+      this.snackBar.open('Ten adres email jest już zarejestrowany', '', { duration: 2000 });
+    } else if (response.StatusMessage === 'LOGIN_IS_USED') {
+      this.snackBar.open('Ten login jest już zarejestrowany', '', { duration: 2000 });
+    } else if (response.StatusMessage === 'EMAIL_AND_LOGIN_IS_USED') {
+      this.snackBar.open('Ten adres email i login jest już zarejestrowany', '', { duration: 2000 });
+    } else {
+      this.snackBar.open('Wystąpił nieznany błąd', '', { duration: 2000 });
     }
   }
 

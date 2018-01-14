@@ -29,13 +29,13 @@ export class AuthService {
 
   async Register(userData: RegisterUserData): Promise<ServiceResponse<BearerToken>> {
     const registerUrl = environment.apiUrl + 'api/Auth/Register';
-    const res = await this.http.post(registerUrl, userData).toPromise();
+    const res = this.http.post(registerUrl, userData).toPromise();
     return await ServiceResponse.CreateServiceResponse<BearerToken>(res);
   }
 
   async Login(credentials: Credentials): Promise<ServiceResponse<BearerToken>> {
     const loginUrl = environment.apiUrl + 'api/Auth/Login';
-    const res = await this.http.post(loginUrl, credentials).toPromise();
+    const res = this.http.post(loginUrl, credentials).toPromise();
     return await ServiceResponse.CreateServiceResponse<BearerToken>(res);
   }
 

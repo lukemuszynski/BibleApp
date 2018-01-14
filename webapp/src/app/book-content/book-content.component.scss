@@ -1,16 +1,12 @@
-
 .example-headers-align .mat-expansion-panel-header-title,
 .example-headers-align .mat-expansion-panel-header-description {
   flex-basis: 0;
-  
 }
 
 .example-headers-align .mat-expansion-panel-header-description {
-  justify-content: space-between;
-  // text-overflow: ellipsis;
-  align-items: right ;
+  justify-content: space-between; // text-overflow: ellipsis;
+  align-items: right;
 }
-
 
 .example-form {
   min-width: 150px;
@@ -22,13 +18,22 @@
   width: 90%;
 }
 
-
 .example-container {
   display: flex;
   flex-direction: column;
 }
 
-.SegmentTitle2 .SegmentTitle1 .SegmentMeanTitle2 .SegmentMeanTitle1{
+.SegmentTitle2 .SegmentTitle1 .SegmentMeanTitle2 .SegmentMeanTitle1 {
   color: #03a9f4;
   align-items: center;
+}
+
+.blur-effect {
+  -webkit-filter: blur(3px);
+  -moz-filter: blur(3px);
+  -o-filter: blur(3px);
+  -ms-filter: blur(3px);
+  filter: blur(3px); // width: 100px;
+  // height: 100px;
+  background-color: rgb(255, 255, 255);
 }

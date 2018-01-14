@@ -19,5 +19,6 @@ namespace BibleAppCore.Contracts.Contract.ViewModel
         public Guid ManageCommentKeyGuid { get; set; }
         public string UserLogin { get; set; }
         public Guid UserGuid { get; set; }
+        public bool IsPrivate { get; set; }
     }
 }

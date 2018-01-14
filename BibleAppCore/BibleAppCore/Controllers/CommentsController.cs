@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace BibleAppCore.Controllers
 {
     [Route("api/Comments")]
-    public class CommentsController : Controller
+    public class CommentsController : BaseController
     {
         private IRepository Repository { get; set; }
 
@@ -26,7 +26,7 @@ namespace BibleAppCore.Controllers
         public async Task<List<Comment>> GetAllComments()
         {
 
-            List<Comment> comments = await Repository.GetAllComments();
+            List<Comment> comments = await Repository.GetAllComments(GetUserGuid());
 
             comments.ForEach(x => x.ManageCommentKeyGuid = Guid.Empty);
 
@@ -39,8 +39,7 @@ namespace BibleAppCore.Controllers
         {
             
             string login = User.Claims.FirstOrDefault(x => x.Type == "login")?.Value;
-            Guid guid = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "guid")?.Value);
-            comment.UserGuid = guid;
+            comment.UserGuid = GetUserGuid() ?? Guid.Empty;
             comment.UserLogin = login;
             
             if (!string.IsNullOrEmpty(comment.Url))

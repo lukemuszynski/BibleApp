@@ -1,3 +1,4 @@
+import { AuthService } from './../services/auth-service/auth.service';
 import { CommentDomainObject } from './../models/CommentDomainObject';
 import { BookExtendedDomainObject } from './../models/BookExtendedDomainObject';
 import { BookService } from './../services/book-service/book.service';
@@ -17,7 +18,7 @@ import { CustomMaterialModule } from '../custom-material/custom-material.module'
 export class BookContentComponent implements OnInit {
 
   constructor(private _bookService: BookService, private route: ActivatedRoute, private sanitizer: DomSanitizer,
-    public snackBar: MatSnackBar) { }
+    public snackBar: MatSnackBar, private authService: AuthService) { }
   private sub: any;
   private bookGuid: string;
   private book: BookExtendedDomainObject;
@@ -40,10 +41,8 @@ export class BookContentComponent implements OnInit {
 
 
   async ngOnInit() {
-
     this.book = this.CreateDefault();
     this.cleanComment();
-
 
     this.sub = this.route.params.subscribe(async params => {
       this.bookGuid = params['guid'];
@@ -51,16 +50,12 @@ export class BookContentComponent implements OnInit {
       this.book.Passages.sort((a, b) => (a.PassageNumber - b.PassageNumber));
       this.book.Comments.forEach(x => {
         const ownerGuid = localStorage['comment' + x.Guid];
-
         if (ownerGuid != null) {
           x.ManageCommentKeyGuid = ownerGuid;
         }
-
-
       });
       console.log(this.book);
     });
-
   }
 
   CreateDefault() {
@@ -76,8 +71,6 @@ export class BookContentComponent implements OnInit {
   }
 
   async addComment() {
-    console.log(this.newComment);
-
 
     this.newComment.BookGuid = this.bookGuid;
     if (this.wholeBookComment) {
@@ -91,7 +84,7 @@ export class BookContentComponent implements OnInit {
     const addedComment = book.Comments.find(x => x.Title === this.newComment.Title);
     localStorage['comment' + addedComment.Guid] = addedComment.ManageCommentKeyGuid;
     this.cleanComment();
-    this.snackBar.open('Dodano komentarz', '', { duration: 2000});
+    this.snackBar.open('Dodano komentarz', '', { duration: 2000 });
   }
 
   cleanComment() {
@@ -101,5 +94,10 @@ export class BookContentComponent implements OnInit {
     this.newComment.Title = '';
     this.newComment.EndIndex = '';
     this.newComment.StartIndex = '';
+    this.newComment.IsPrivate = false;
+  }
+
+  IsAuthorized(): Boolean {
+    return this.authService.IsAuthorized();
   }
 }

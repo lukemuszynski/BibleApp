@@ -27,7 +27,10 @@ namespace BibleAppCore.DataLayer.TransferObjects
         {
             None,
             NotFound,
-            SaveException
+            SaveException,
+            UserIndexException,
+            EmailIndexException,
+            UserIndexAndEmailIndexException
         }
     }
 

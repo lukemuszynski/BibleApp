@@ -16,6 +16,10 @@ namespace BibleAppCore.DataLayer.Repository
     public class AuthRepository : IAuthRepository
     {
         public BibleDbContext DbContext { get; set; }
+
+        private const string IX_Users_EmailAddress = "IX_Users_EmailAddress";
+        private const string IX_Users_Login = "IX_Users_Login";
+
         public AuthRepository(BibleDbContext bibleDbContext)
         {
             DbContext = bibleDbContext;
@@ -42,6 +46,29 @@ namespace BibleAppCore.DataLayer.Repository
             try
             {
                 var res = await DbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException e)
+            {
+                bool? containsLoginIndexException = e.InnerException?.Message?.Contains(IX_Users_Login);
+                bool? containsEmailIndexException = e.InnerException?.Message?.Contains(IX_Users_EmailAddress);
+                if ((containsLoginIndexException ?? false) && (containsEmailIndexException ?? false))
+                {
+                    repositoryResponse.Exception = e;
+                    repositoryResponse.RepositoryResponseMessage = RepositoryResponse<User>
+                        .RepositoryResponseMessageEnum.UserIndexAndEmailIndexException;
+                }
+                else if (containsLoginIndexException ?? false)
+                {
+                    repositoryResponse.Exception = e;
+                    repositoryResponse.RepositoryResponseMessage = RepositoryResponse<User>
+                        .RepositoryResponseMessageEnum.UserIndexException;
+                }else if (containsEmailIndexException ?? false)
+                {
+                    repositoryResponse.Exception = e;
+                    repositoryResponse.RepositoryResponseMessage = RepositoryResponse<User>
+                        .RepositoryResponseMessageEnum.EmailIndexException;
+                }
+                return repositoryResponse;
             }
             catch (Exception e)
             {

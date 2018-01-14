@@ -14,7 +14,7 @@ using BibleAppCore.Contracts.Contract.ViewModel;
 namespace BibleAppCore.Controllers
 {
     [Route("api/Books")]
-    public class BooksController : Controller
+    public class BooksController : BaseController
     {
         private IRepository Repository { get; set; }
 
@@ -26,11 +26,9 @@ namespace BibleAppCore.Controllers
         [HttpGet("GetBook/{guid}")]
         public async Task<BookExtended> GetBook(Guid guid)
         {
-
-            BookExtended ret = await Repository.GetBookByGuid(guid);
+            BookExtended ret = await Repository.GetBookByGuid(guid, GetUserGuid());
             return ret;
         }
-
 
         [HttpGet("GetBooks")]
         public async Task<List<Book>> GetAllBooks()
@@ -39,7 +37,7 @@ namespace BibleAppCore.Controllers
             {
                 List<Book> result = new List<Book>();
                 List<Book> books = await Repository.GetAllBooks();
-
+                
                 var bookNames = books.Select(x => x.BookFullName).Distinct().ToList();
 
                 bookNames.ForEach(bookFullName => result.Add(new Book()
@@ -59,8 +57,5 @@ namespace BibleAppCore.Controllers
                 throw;
             }
         }
-
-     
-
     }
 }

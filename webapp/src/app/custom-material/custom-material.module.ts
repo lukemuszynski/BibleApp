@@ -1,6 +1,8 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-// tslint:disable-next-line:max-line-length
-import { MatCheckboxModule, MatButtonModule, MatChipsModule, MatSidenavModule, MatListModule, MatToolbarModule, MatIconModule } from '@angular/material';
+import {
+  MatCheckboxModule, MatButtonModule, MatChipsModule, MatSidenavModule,
+  MatListModule, MatToolbarModule, MatIconModule
+} from '@angular/material';
 import { MatInputModule } from '@angular/material';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -12,7 +14,9 @@ import { MatNativeDateModule } from '@angular/material';
 import { MatTabsModule } from '@angular/material';
 import { MatCardModule } from '@angular/material';
 import { MatGridListModule } from '@angular/material';
+import { MatDialogModule } from '@angular/material';
 import { MatFormFieldModule, MatSelectModule, MatSnackBarModule } from '@angular/material';
+import { MatSlideToggleModule } from '@angular/material';
 @NgModule({
   imports: [
     MatButtonModule,
@@ -33,7 +37,9 @@ import { MatFormFieldModule, MatSelectModule, MatSnackBarModule } from '@angular
     MatGridListModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDialogModule,
+    MatSlideToggleModule
   ],
   exports: [
     BrowserAnimationsModule,
@@ -55,7 +61,9 @@ import { MatFormFieldModule, MatSelectModule, MatSnackBarModule } from '@angular
     MatGridListModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDialogModule,
+    MatSlideToggleModule
   ],
   declarations: []
 })

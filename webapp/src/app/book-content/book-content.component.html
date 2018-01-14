@@ -19,8 +19,8 @@
                 <h4 class="SegmentTitle1; color: #03a9f4;">{{passage.Title1}}</h4>
               </div>
               <div *ngIf="passage.Meantitle2 && passage.Meantitle2 !== ''">
-                  <h4 class="SegmentMeanTitle1; color: #03a9f4;"> {{passage.Meantitle2}}</h4>
-                </div>
+                <h4 class="SegmentMeanTitle1; color: #03a9f4;"> {{passage.Meantitle2}}</h4>
+              </div>
               <div *ngIf="passage.Meantitle1 && passage.Meantitle1 !== ''">
                 <h4 class="SegmentMeanTitle1; color: #03a9f4;"> {{passage.Meantitle1}}</h4>
               </div>
@@ -58,39 +58,40 @@
     </mat-tab>
     <mat-tab label="Dodaj komentarz">
       <div *ngIf="selectedTabIndex == 2" class="example-container">
-        <mat-card>
+        <h2 *ngIf="!IsAuthorized()">Zaloguj się aby dodawać kometarze!</h2>
+        <mat-card [ngClass]="{'blur-effect':!IsAuthorized()}">
           <div class='example-form'>
+            <mat-slide-toggle [(ngModel)]="newComment.IsPrivate">{{newComment.IsPrivate ? 'Komentarz prywatny' : 'Komentarz publiczny'}}</mat-slide-toggle>
             <mat-form-field class="example-full-width">
-              <input matInput placeholder="Tytuł" maxlength="100" [(ngModel)]="newComment.Title">
+              <input matInput placeholder="Tytuł" maxlength="100" [(ngModel)]="newComment.Title" [disabled]="!IsAuthorized()">
               <mat-hint align="end">{{newComment.Title.length}} / 100</mat-hint>
             </mat-form-field>
             <mat-form-field class="example-full-width">
-              <input matInput placeholder="Url" maxlength="200" [(ngModel)]="newComment.Url">
+              <input matInput placeholder="Url" maxlength="200" [(ngModel)]="newComment.Url" [disabled]="!IsAuthorized()">
               <mat-hint align="end">{{newComment.Url.length}} / 200</mat-hint>
             </mat-form-field>
             <mat-form-field class="example-full-width">
-              <textarea matInput placeholder="Opis" maxlength="5000" [(ngModel)]="newComment.Text"></textarea>
+              <textarea matInput placeholder="Opis" maxlength="5000" [(ngModel)]="newComment.Text" [disabled]="!IsAuthorized()"></textarea>
               <mat-hint align="end">{{newComment.Text.length}} / 5000</mat-hint>
             </mat-form-field>
 
             <!-- <form> -->
             <div>Wersety: </div>
             <mat-form-field>
-              <input matInput [disabled]='wholeBookComment' type="number" placeholder="Od" [(ngModel)]="newComment.StartIndex">
+              <input matInput [disabled]='wholeBookComment || !IsAuthorized()' type="number" placeholder="Od" [(ngModel)]="newComment.StartIndex">
             </mat-form-field>
 
             <mat-form-field>
-              <input matInput [disabled]='wholeBookComment' type="number" placeholder="Do" [(ngModel)]="newComment.EndIndex">
+              <input matInput [disabled]='wholeBookComment || !IsAuthorized()' type="number" placeholder="Do" [(ngModel)]="newComment.EndIndex">
             </mat-form-field>
 
-            <mat-checkbox [(ngModel)]="wholeBookComment">Cała księga</mat-checkbox>
+            <mat-checkbox [(ngModel)]="wholeBookComment" [disabled]="!IsAuthorized()">Cała księga</mat-checkbox>
 
           </div>
           <mat-action-row>
-            <button mat-button color="warn" (click)="cleanComment()">Wyczyść</button>
-            <button mat-button color="primary" (click)="addComment()">Dodaj komentarz</button>
+            <button mat-button color="warn" (click)="cleanComment()" [disabled]="!IsAuthorized()">Wyczyść</button>
+            <button mat-button color="primary" (click)="addComment()" [disabled]="!IsAuthorized()">Dodaj komentarz</button>
           </mat-action-row>
-
         </mat-card>
       </div>
     </mat-tab>

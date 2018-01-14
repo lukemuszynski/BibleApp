@@ -1,32 +1,27 @@
-<mat-card>
+<form class="full-width">
 
-  <form class="example-form">
+  <mat-form-field class="full-width">
+    <input matInput placeholder="Login" [formControl]="loginFormControl">
+    <mat-error *ngIf="loginFormControl.hasError('required')">
+      Login jest
+      <strong>wymagany</strong>
+    </mat-error>
+  </mat-form-field>
 
-    <mat-form-field>
-      <input matInput placeholder="Login" [formControl]="loginFormControl">
-      <mat-error *ngIf="loginFormControl.hasError('required')">
-        Login jest
-        <strong>wymagany</strong>
-      </mat-error>
-    </mat-form-field>
+  <mat-form-field class="full-width">
+    <input matInput type="password" placeholder="Hasło" [formControl]="passwordFormControl">
+    <mat-error *ngIf="passwordFormControl.hasError('required')">
+      Hasło jest
+      <strong>wymagane</strong>
+    </mat-error>
+    <mat-error *ngIf="passwordFormControl.hasError('minlength')">
+      Hasło musi mieć conajmniej
+      <strong>6 znaków</strong>
+    </mat-error>
+  </mat-form-field>
+  <mat-action-row>
 
-    <mat-form-field>
-      <input matInput type="password" placeholder="Hasło" [formControl]="passwordFormControl">
-      <mat-error *ngIf="passwordFormControl.hasError('required')">
-        Hasło jest
-        <strong>wymagane</strong>
-      </mat-error>
-      <mat-error *ngIf="passwordFormControl.hasError('minlength')">
-        Hasło musi mieć conajmniej
-        <strong>6 znaków</strong>
-      </mat-error>
-    </mat-form-field>
-    <mat-action-row>
+    <button mat-button color="primary" (click)='login()' [disabled]='loginFormGroup.invalid'>Zaloguj się</button>
+  </mat-action-row>
 
-      <button mat-button color="primary" (click)='login()' [disabled]='loginFormGroup.invalid'>Zaloguj się</button>
-    </mat-action-row>
-
-  </form>
-
-
-</mat-card>
+</form>

@@ -1,3 +1,4 @@
+import { MatDialogRef, MatDialogModule, MatDialog } from '@angular/material';
 import { BookService } from './services/book-service/book.service';
 import { CustomMaterialModule } from './custom-material/custom-material.module';
 import { BrowserModule } from '@angular/platform-browser';
@@ -57,6 +58,7 @@ const appRoutes: Routes = [
     BrowserModule,
     HttpModule,
     FormsModule,
+    // MatDialogModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true, useHash: true } // <-- debugging purposes only
@@ -64,7 +66,8 @@ const appRoutes: Routes = [
     ClipboardModule,
     Ng2SearchPipeModule
   ],
-  providers: [BookService, AuthService, NotificationsService],
-  bootstrap: [AppComponent]
+  providers: [BookService, AuthService, NotificationsService, MatDialog],
+  bootstrap: [AppComponent],
+  // entryComponents: [AuthenticationComponent]
 })
 export class AppModule { }

@@ -139,6 +139,9 @@ namespace BibleAppCore.DataLayer
                 .Property(x => x.UserLogin)
                 .IsRequired()
                 .HasDefaultValue("SYSTEM");
+            modelBuilder.Entity<CommentDomainObject>()
+                .Property(x => x.IsPrivate)
+                .IsRequired();
 
             modelBuilder.Entity<UserDomainObject>()
                 .HasKey(x => x.Guid);

@@ -1,17 +1,17 @@
-<mat-grid-list [cols]="5">
-  <mat-grid-tile colspan="4">
+<div *ngIf="loginPage">
+  <div mat-dialog-content>
+    <h1>Logowanie</h1>
     <app-login></app-login>
-  </mat-grid-tile>
-  <mat-grid-tile>
-    <button mat-button color="accent" routerLink="/Register">Nie masz konta?</button>
-  </mat-grid-tile>
-</mat-grid-list>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button color="accent" (click)="switchPage()">Nie masz konta?</button>
+  </div>
+</div>
 
-<!-- <mat-card>
-  <app-login></app-login>
+<div *ngIf="!loginPage">
+  <h1>Rejestracja</h1>
+  <div mat-dialog-content>
+    <app-register></app-register>
+  </div>
+</div>
 
-</mat-card>
-<mat-card>
-  <app-register></app-register>
-
-</mat-card> -->

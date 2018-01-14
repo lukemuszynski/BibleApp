@@ -2,16 +2,40 @@
 @include mat-core();
 html,
 body {
-    margin: 0;
-    width: 100%;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-    overflow: auto;
+  margin: 0;
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+}
+
+h1 {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 $custom-theme-primary: mat-palette($mat-light-blue);
 $custom-theme-accent: mat-palette($mat-orange, A200, A100, A400);
 $custom-theme-warn: mat-palette($mat-red);
 $custom-theme: mat-light-theme($custom-theme-primary, $custom-theme-accent, $custom-theme-warn);
+
+mat-expansion-panel-header.mat-expanded>.mat-content>mat-panel-title > .header > .header-description {
+//   text-decoration: underline;
+//   text-decoration-color: mat-color($custom-theme-primary);
+  font-weight: bold;
+  border-bottom: 0.4375em;
+  border-bottom-width: 1px;
+  border-bottom-color: mat-color($custom-theme-primary);
+}
+mat-expansion-panel-header.mat-expanded>.mat-content{
+    //   text-decoration: underline;
+    //   text-decoration-color: mat-color($custom-theme-primary);
+      font-weight: bold;
+      border-bottom: 0.4375em;
+      border-bottom-color: mat-color($custom-theme-primary);
+    }
 @include angular-material-theme($custom-theme);
+
+
+
+

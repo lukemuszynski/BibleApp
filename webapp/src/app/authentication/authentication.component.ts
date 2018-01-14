@@ -10,7 +10,14 @@ import { CustomMaterialModule } from '../custom-material/custom-material.module'
 export class AuthenticationComponent implements OnInit {
 
   constructor() { }
+
+  loginPage = true;
+
   ngOnInit() {
+  }
+
+  switchPage() {
+    this.loginPage = !this.loginPage;
   }
 
 }

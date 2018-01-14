@@ -12,6 +12,7 @@ using BibleAppCore.DataLayer.TransferObjects;
 
 namespace BibleAppCore.DataLayer.Repository
 {
+
     public class Repository : IRepository
     {
         private BibleDbContext DbContext { get; set; }
@@ -21,10 +22,18 @@ namespace BibleAppCore.DataLayer.Repository
             DbContext = dbContext;
         }
 
-        public async Task<BookExtended> GetBookByGuid(Guid guid)
+        public async Task<BookExtended> GetBookByGuid(Guid guid, Guid? userGuid = null)
         {
             BookExtendedDomainObject book = await DbContext.BooksExtended.FindAsync(guid);
-            var comments = await DbContext.Comments.Where(x => x.BookGuid == guid).ToListAsync();
+            List<CommentDomainObject> comments;
+            if (userGuid != null)
+            {
+                comments = await DbContext.Comments.Where(x => x.BookGuid == guid && (x.IsPrivate == false || x.UserGuid == userGuid)).ToListAsync();
+            }
+            else
+            {
+                comments = await DbContext.Comments.Where(x => x.BookGuid == guid && x.IsPrivate == false).ToListAsync();
+            }
             comments.ForEach(x => x.ManageCommentKeyGuid = Guid.Empty);
             book.Comments = comments;
             book.OnRead();
@@ -37,9 +46,18 @@ namespace BibleAppCore.DataLayer.Repository
             return Mapper.Map<List<Book>>(await DbContext.Books.ToListAsync());
         }
 
-        public async Task<List<Comment>> GetAllComments()
+        public async Task<List<Comment>> GetAllComments(Guid? userGuid = null)
         {
-            return Mapper.Map<List<Comment>>(await DbContext.Comments.OrderByDescending(x => x.AddTime).ToListAsync());
+            List<CommentDomainObject> comments;
+            if (userGuid != null)
+            {
+                comments = await DbContext.Comments.Where(x=> x.IsPrivate == false || x.UserGuid == userGuid).ToListAsync();
+            }
+            else
+            {
+                comments = await DbContext.Comments.Where(x => x.IsPrivate == false).ToListAsync();
+            }
+            return Mapper.Map<List<Comment>>(comments);
         }
 
         public async Task<RepositoryResponse<BookExtended>> AddComment(Comment comment)
@@ -55,7 +73,7 @@ namespace BibleAppCore.DataLayer.Repository
                     comment.ManageCommentKeyGuid = Guid.NewGuid();
                     DbContext.Comments.Add(Mapper.Map<CommentDomainObject>(comment));
                     await DbContext.SaveChangesAsync();
-                    book.Comments = await DbContext.Comments.Where(x => x.BookGuid == book.Guid).ToListAsync();
+                    book.Comments = await DbContext.Comments.Where(x => (x.BookGuid == book.Guid) && (x.IsPrivate == false || x.UserGuid == comment.UserGuid)).ToListAsync();
                     repositoryResponse.Value = Mapper.Map<BookExtended>(book);
                 }
                 else

@@ -1,5 +1,6 @@
+import { AuthenticationComponent } from './../authentication/authentication.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialogRef } from '@angular/material';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { AuthService } from './../services/auth-service/auth.service';
 import { Component, OnInit } from '@angular/core';
@@ -14,7 +15,8 @@ import { Credentials } from '../models/Credentials';
 
 export class LoginComponent implements OnInit {
 
-  constructor(private authService: AuthService, private snackBar: MatSnackBar, private route: ActivatedRoute, private router: Router) { }
+  constructor(private authService: AuthService, private snackBar: MatSnackBar, private route: ActivatedRoute, private router: Router,
+    private dialogRef: MatDialogRef<AuthenticationComponent>) { }
   loginFormControl = new FormControl('',
     [Validators.required]
   );
@@ -44,7 +46,7 @@ export class LoginComponent implements OnInit {
     if (response.Ok) {
       this.authService.SaveToken(response.Value);
       this.snackBar.open('Zalogowano pomyślnie', '', { duration: 2000 });
-      this.router.navigate(['']);
+      this.dialogRef.close();
     } else {
       if (response.StatusCode === 403) {
         this.snackBar.open('Niepoprawny login lub hasło!', '', { duration: 2000 });

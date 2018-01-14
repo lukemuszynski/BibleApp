@@ -8,14 +8,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using BibleAppCore.Contracts.Contract.ErrorCodes;
 using BibleAppCore.Contracts.Contract.Security;
 using BibleAppCore.Contracts.Contract.ViewModel;
+using BibleAppCore.DataLayer.TransferObjects;
 using BibliaApp;
 
 namespace BibleAppCore.Controllers
 {
     [Route("api/Auth")]
-    public class AuthController : Controller
+    public class AuthController : BaseController
     {
 
         private IAuthRepository Repository { get; set; }
@@ -46,13 +48,18 @@ namespace BibleAppCore.Controllers
             newUser.Password = EncyptionProvider.HashPassword(newUser.Password);
             var repositoryResponse = await Repository.RegisterUser(newUser);
             if (!repositoryResponse.Successful)
+            {
+                if (repositoryResponse.RepositoryResponseMessage == RepositoryResponse<User>.RepositoryResponseMessageEnum.EmailIndexException)
+                    return new BadRequestObjectResult(AuthControllerErrorCodes.EmailUsedError);
+                if (repositoryResponse.RepositoryResponseMessage == RepositoryResponse<User>.RepositoryResponseMessageEnum.UserIndexException)
+                    return new BadRequestObjectResult(AuthControllerErrorCodes.LoginUsedError);
+                if (repositoryResponse.RepositoryResponseMessage == RepositoryResponse<User>.RepositoryResponseMessageEnum.UserIndexAndEmailIndexException)
+                    return new BadRequestObjectResult(AuthControllerErrorCodes.LoginAndEmailUsedError);
                 return new BadRequestResult();
+            }
 
             BearerToken bearerToken = EncyptionProvider.CreateBearerToken(Mapper.Map<BearerToken>(repositoryResponse.Value));
             return new JsonResult(bearerToken);
         }
-
     }
-
-
 }

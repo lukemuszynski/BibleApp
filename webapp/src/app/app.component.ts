@@ -1,11 +1,13 @@
+import { AuthenticationComponent } from './authentication/authentication.component';
 import { AuthService } from './services/auth-service/auth.service';
 import { BookDomainObject } from './models/BookDomainObject';
 import { BookService } from './services/book-service/book.service';
 import { MatSidenavModule, MatSidenav } from '@angular/material';
 import { CustomMaterialModule } from './custom-material/custom-material.module';
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, Inject } from '@angular/core';
 import { Book } from './models/Book';
 import { Router, ActivatedRoute } from '@angular/router';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'app-root',
@@ -29,7 +31,9 @@ export class AppComponent implements OnInit {
   selectedBook: Book;
   selectedSubbook: BookDomainObject;
 
-  constructor(private bookService: BookService, private route: ActivatedRoute, private authService: AuthService) {
+  constructor(private bookService: BookService, private route: ActivatedRoute, private authService: AuthService,
+    public dialog: MatDialog
+  ) {
 
   }
 
@@ -85,11 +89,13 @@ export class AppComponent implements OnInit {
   }
 
   getChipSelected(subbook: BookDomainObject): boolean {
-    // tslint:disable-next-line:curly
-    if (subbook.Guid === this.selectedSubbook.Guid)
-      console.log('FOUND');
-
     return subbook.Guid === this.selectedSubbook.Guid;
+  }
+
+  openAuthenticationDialog() {
+    const dialogRef = this.dialog.open(AuthenticationComponent, {
+      width: '600px',
+    });
   }
 
   async logout() {

@@ -24,12 +24,31 @@ export class BookService {
   }
 
   async getComments(): Promise<CommentDomainObject[]> {
-    const response = await this.http.get(this.getCommentsListUrl).toPromise();
+
+    let request;
+    if (this.authService.IsAuthorized) {
+      const bearer = 'Bearer ' + this.authService.GetToken();
+      const headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': bearer });
+      const options = new RequestOptions({ headers: headers });
+      request = this.http.get(this.getCommentsListUrl, options);
+    } else {
+      request = this.http.get(this.getCommentsListUrl);
+    }
+    const response = await request.toPromise();
     return response.json();
   }
 
   async getAllBookExtended(guid: string): Promise<BookExtendedDomainObject> {
-    const response = await this.http.get(this.bookUrl + guid).toPromise();
+    let request;
+    if (this.authService.IsAuthorized) {
+      const bearer = 'Bearer ' + this.authService.GetToken();
+      const headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': bearer });
+      const options = new RequestOptions({ headers: headers });
+      request = this.http.get(this.bookUrl + guid, options);
+    } else {
+      request = this.http.get(this.bookUrl + guid);
+    }
+    const response = await request.toPromise();
     return response.json();
   }
 
