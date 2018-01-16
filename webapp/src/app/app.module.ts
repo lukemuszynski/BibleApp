@@ -18,6 +18,7 @@ import { AuthService } from './services/auth-service/auth.service';
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { NotificationsService } from './services/notifications-service/notifications.service';
 import { MyCommentsComponent } from './my-comments/my-comments.component';
+import { SidenavSubbooksComponent } from './sidenav-subbooks/sidenav-subbooks.component';
 
 const appRoutes: Routes = [
   {
@@ -56,7 +57,8 @@ const appRoutes: Routes = [
     RegisterComponent,
     LoginComponent,
     AuthenticationComponent,
-    MyCommentsComponent
+    MyCommentsComponent,
+    SidenavSubbooksComponent
   ],
   imports: [
     CustomMaterialModule,

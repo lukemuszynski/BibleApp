@@ -39,7 +39,8 @@ namespace BibleAppCore
                     {
                         ValidateIssuer = true,
                         ValidateAudience = true,
-                        //ValidateLifetime = true,
+                        //TODO refresh tokeny
+                        ValidateLifetime = false,
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = Configuration["JwtIssuer"],
                         ValidAudience = Configuration["JwtIssuer"],

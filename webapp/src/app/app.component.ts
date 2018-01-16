@@ -1,3 +1,4 @@
+import { SidenavSubbooksComponent } from './sidenav-subbooks/sidenav-subbooks.component';
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { AuthService } from './services/auth-service/auth.service';
 import { BookDomainObject } from './models/BookDomainObject';
@@ -21,15 +22,10 @@ export class AppComponent implements OnInit {
   calc3Cols = '3 3 calc(15em + 20px)';
   title = 'Bible explorer';
 
-  currentStep: String = 'book';
-  step = 0;
-  term = '';
   @ViewChild('sidenav')
   private matSidenav: MatSidenav;
 
   booksObjects: Book[];
-  selectedBook: Book;
-  selectedSubbook: BookDomainObject;
 
   constructor(private bookService: BookService, private route: ActivatedRoute, public authService: AuthService,
     public dialog: MatDialog
@@ -46,35 +42,23 @@ export class AppComponent implements OnInit {
         this.booksObjects.find(x => {
           const foundSubbook = x.Subbooks.find(y => y.Guid === subbookGuid);
           if (foundSubbook !== undefined) {
-            this.selectedSubbook = foundSubbook;
-            this.selectedBook = x;
+            this.bookService.selectedBook = foundSubbook;
+            foundSubbook._isSelected = true;
             return true;
           }
         });
-      } else {
-        this.selectedSubbook = new BookDomainObject();
-        this.selectedSubbook.Guid = '0';
       }
     });
   }
 
-  selectSubbook(book, subbook) {
-    this.selectedBook = book;
-    this.selectedSubbook = subbook;
+  selectSubbook() {
     this.matSidenav.close();
-    console.log(subbook);
   }
 
-  setStep(index: number) {
-    this.step = index;
-  }
-
-  nextStep() {
-    this.step++;
-  }
-
-  prevStep() {
-    this.step--;
+  // tslint:disable-next-line:member-ordering
+  setStepBook: Book = new Book();
+  setBook(book: Book) {
+    this.setStepBook = book;
   }
 
   prepareBooksSidenav(booksObjects: Book[]) {
@@ -84,13 +68,9 @@ export class AppComponent implements OnInit {
     console.log(this.booksObjects);
   }
 
-  getChipColor(subbook: BookDomainObject): string {
-    return subbook.Guid === this.selectedSubbook.Guid ? 'warn' : 'secondary';
-  }
-
-  getChipSelected(subbook: BookDomainObject): boolean {
-    return subbook.Guid === this.selectedSubbook.Guid;
-  }
+  // getChipColor(subbook: BookDomainObject): string {
+  //   return subbook.Guid === this.selectedSubbook.Guid ? 'warn' : 'secondary';
+  // }
 
   openAuthenticationDialog() {
     const dialogRef = this.dialog.open(AuthenticationComponent, {

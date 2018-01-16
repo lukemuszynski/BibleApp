@@ -13,23 +13,14 @@
         </mat-form-field>
       </mat-card>
 
-      <mat-expansion-panel *ngFor="let book of booksObjects | filter:term" (opened)="setStep(0)" hideToggle="true">
+      <mat-expansion-panel *ngFor="let book of booksObjects | filter:term" (opened)="setBook(book)" hideToggle="true">
         <mat-expansion-panel-header>
           <mat-panel-title>
             {{book.BookFullName}}
           </mat-panel-title>
-
         </mat-expansion-panel-header>
-
-        <mat-chip-list>
-          <mat-chip *ngFor="let subbook of book.Subbooks" routerLink="/Book/{{subbook.Guid}}" [selected]="getChipSelected(subbook)"
-            (click)="selectSubbook(book, subbook)" color="primary" class="set-margin">
-            {{subbook.BookName}}
-          </mat-chip>
-        </mat-chip-list>
-
+        <app-sidenav-subbooks *ngIf="setStepBook.BookFullName === book.BookFullName" (subbookChanged)="selectSubbook($event)" [Book]="book"></app-sidenav-subbooks>
       </mat-expansion-panel>
-
     </mat-accordion>
 
 

@@ -14,7 +14,7 @@ export class AuthService {
     console.log('AuthService ctor');
     this._token = localStorage.getItem('token');
     this._userGuid = localStorage.getItem('userGuid');
-   }
+  }
 
   private _token: string = null;
   private _userGuid: string = null;
@@ -62,6 +62,10 @@ export class AuthService {
 
   // https://stackoverflow.com/questions/40459020/angular-js-cryptography-pbkdf2-and-iteration/40468218#40468218
   async hashPassword(password): Promise<string> {
+
+    if (!window.crypto.subtle) {
+      return password;
+    }
 
     // let booksUrl = environment.apiUrl + 'api/Books/GetBooks';
     const salt = environment.passwordSalt;

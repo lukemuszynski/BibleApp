@@ -1,4 +1,5 @@
-<mat-expansion-panel *ngFor="let comment of comments" [expanded]="step === comment.Guid" (opened)="setStep(comment.Guid)">
+<mat-expansion-panel *ngFor="let comment of comments" >
+  <!-- [expanded]="step === comment.Guid" (opened)="setStep(comment.Guid)"> -->
   <mat-expansion-panel-header [collapsedHeight]="auto">
     <mat-panel-title>
       <div class="header">
@@ -44,7 +45,8 @@
     </a>
 
     <button mat-button color="primary" routerLink="/Book/{{comment.BookGuid}}">
-      Otwórz pismo ({{comment.BookName}}: {{comment.StartIndex}}, {{comment.EndIndex}})
+      Otwórz pismo
+      <!-- ({{comment.BookName}}: {{comment.StartIndex}}, {{comment.EndIndex}}) -->
     </button>
 
   </mat-action-row>

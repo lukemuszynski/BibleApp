@@ -4,4 +4,6 @@ export class BookDomainObject {
     BookFullName: string;
     SubbookNumber: number;
     BookGlobalNumber: number;
+
+    _isSelected: Boolean = false;
 }

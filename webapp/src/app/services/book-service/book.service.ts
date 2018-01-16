@@ -20,7 +20,8 @@ export class BookService {
   getCommentsListUrl = environment.apiUrl + 'api/Comments/GetComments';
   getMyCommentsListUrl = environment.apiUrl + 'api/Comments/GetMyComments';
 
-  private books: Book[] = [];
+  public books: Book[] = [];
+  public selectedBook: BookDomainObject = null;
 
   async getAllBooks(): Promise<Book[]> {
     const response = await this.http.get(this.booksUrl).toPromise();
