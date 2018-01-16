@@ -29,10 +29,10 @@ namespace BibleAppCore.Utilities.Security
 
         public BearerToken CreateBearerToken(BearerToken bearerToken)
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("Jwt:Key").Value));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("JwtKey").Value));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(Configuration["Jwt:Issuer"],
-                Configuration["Jwt:Issuer"],
+            var token = new JwtSecurityToken(Configuration["JwtIssuer"],
+                Configuration["JwtIssuer"],
                 expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: creds);
             token.Payload.AddClaim(new Claim("login", bearerToken.Login));
