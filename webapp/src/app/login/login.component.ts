@@ -15,7 +15,7 @@ import { Credentials } from '../models/Credentials';
 
 export class LoginComponent implements OnInit {
 
-  constructor(private authService: AuthService, private snackBar: MatSnackBar, private route: ActivatedRoute, private router: Router,
+  constructor(public authService: AuthService, private snackBar: MatSnackBar, private route: ActivatedRoute, private router: Router,
     private dialogRef: MatDialogRef<AuthenticationComponent>) { }
   loginFormControl = new FormControl('',
     [Validators.required]

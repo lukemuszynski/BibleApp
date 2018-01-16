@@ -1,5 +1,5 @@
 <mat-expansion-panel *ngFor="let comment of comments" [expanded]="step === comment.Guid" (opened)="setStep(comment.Guid)">
-  <mat-expansion-panel-header [collapsedHeight]="auto" class="padding:10px; ">
+  <mat-expansion-panel-header [collapsedHeight]="auto">
     <mat-panel-title>
       <div class="header">
         <!-- <div class="header-title">{{book.BookName}} : {{comment.StartIndex}}, {{comment.EndIndex}}</div> -->
@@ -9,7 +9,7 @@
           {{comment.BookName}}: {{comment.StartIndex}}, {{comment.EndIndex}}
           <i *ngIf="comment.IsYoutubeVideo" matTooltip="Youtube" class="fa fa-youtube-play youtube-icon-on-comment" aria-hidden="true"></i>
           <i *ngIf="comment.IsAudioFile" matTooltip="Plik audio" class="fa fa-soundcloud youtube-icon-on-comment" aria-hidden="true"></i>
-          <i *ngIf="comment.UserGuid == authService.GetUserGuid()" matTooltip="Twój komentarz" class="fa fa-user-circle user-icon-on-comment"
+          <i *ngIf="comment.IsMyComment" matTooltip="Twój komentarz" class="fa fa-user-circle user-icon-on-comment"
             aria-hidden="true"></i>
         </div>
       </div>
@@ -30,7 +30,7 @@
 
 
   <mat-action-row>
-    <button mat-button *ngIf="comment.ManageCommentKeyGuid != null && comment.ManageCommentKeyGuid != '00000000-0000-0000-0000-000000000000'"
+    <button mat-button *ngIf="comment.IsMyComment"
       color='warn' (click)="deleteComment(comment)">Usuń</button>
 
     <button ngxClipboard [cbContent]="getUrl(comment)" mat-button color="primary" (click)="snackBar.open('Skopiowano do schowka','',{duration: 2000})">Kopiuj link</button>

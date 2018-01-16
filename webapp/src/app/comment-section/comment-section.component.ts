@@ -28,7 +28,7 @@ export class CommentSectionComponent implements OnInit {
 
 
     constructor(private _bookService: BookService, private route: ActivatedRoute,
-        private sanitizer: DomSanitizer, public snackBar: MatSnackBar, private authService: AuthService) { }
+        private sanitizer: DomSanitizer, public snackBar: MatSnackBar, public authService: AuthService) { }
 
 
 
@@ -58,7 +58,6 @@ export class CommentSectionComponent implements OnInit {
     async deleteComment(comment: CommentDomainObject) {
         const commentToDelete = new CommentDomainObject();
         commentToDelete.Guid = comment.Guid;
-        commentToDelete.ManageCommentKeyGuid = comment.ManageCommentKeyGuid;
         const response = await this._bookService.deleteComment(commentToDelete);
         if (response) {
             this.book.Comments = this.book.Comments.filter(x => x.Guid !== commentToDelete.Guid);

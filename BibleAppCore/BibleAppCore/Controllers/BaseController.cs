@@ -8,10 +8,21 @@ namespace BibleAppCore.Controllers
 {
     public abstract class BaseController : Controller
     {
-        protected Guid? GetUserGuid()
+        private Guid? _userGuid;
+        protected Guid? UserGuid
         {
-            Guid value;
-            return Guid.TryParse(User.Claims.FirstOrDefault(x => x.Type == "guid")?.Value, out value) ? (Guid?)value : null;
+            get
+            {
+                if (_userGuid == null)
+                {
+                    Guid value;
+                    if (Guid.TryParse(User.Claims.FirstOrDefault(x => x.Type == "guid")?.Value, out value))
+                        _userGuid = value;
+                    else
+                        _userGuid = Guid.Empty;
+                }
+                return _userGuid != Guid.Empty ? _userGuid : null;
+            }
         }
     }
 }

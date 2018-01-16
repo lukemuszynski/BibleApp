@@ -2,7 +2,7 @@ import { ServiceResponse } from './../../models/ServiceResponse';
 import { BearerToken } from './../../models/BearerToken';
 import { RegisterUserData } from './../../models/RegisterUserData';
 import { environment } from './../../../environments/environment';
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 import { Credentials } from '../../models/Credentials';
 
@@ -10,26 +10,35 @@ import { Credentials } from '../../models/Credentials';
 @Injectable()
 export class AuthService {
 
-  constructor(private http: Http) { }
+  constructor(private http: Http) {
+    console.log('AuthService ctor');
+    this._token = localStorage.getItem('token');
+    this._userGuid = localStorage.getItem('userGuid');
+   }
+
+  private _token: string = null;
+  private _userGuid: string = null;
 
   IsAuthorized(): Boolean {
-    if (localStorage.getItem('token')) {
+    if (this._token) {
       return true;
     }
     return false;
   }
 
   GetToken(): String {
-    return localStorage.getItem('token');
+    return this._token;
   }
 
   GetUserGuid(): String {
-    return localStorage.getItem('userGuid');
+    return this._userGuid;
   }
 
   SaveToken(bearerToken: BearerToken) {
     localStorage.setItem('token', bearerToken.Token);
     localStorage.setItem('userGuid', bearerToken.Guid);
+    this._token = bearerToken.Token;
+    this._userGuid = bearerToken.Guid;
   }
 
   async Register(userData: RegisterUserData): Promise<ServiceResponse<BearerToken>> {
@@ -46,6 +55,9 @@ export class AuthService {
 
   async Logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('userGuid');
+    this._token = null;
+    this._userGuid = null;
   }
 
   // https://stackoverflow.com/questions/40459020/angular-js-cryptography-pbkdf2-and-iteration/40468218#40468218
@@ -91,7 +103,6 @@ export class AuthService {
   }
 
   // Utility functions
-
   private stringToArrayBuffer(byteString) {
     const byteArray = new Uint8Array(byteString.length);
     for (let i = 0; i < byteString.length; i++) {
@@ -108,6 +119,4 @@ export class AuthService {
     }
     return byteString;
   }
-
-
 }

@@ -15,6 +15,7 @@ namespace BibleAppCore.DataLayer.Repository
         Task<List<Book>> GetAllBooks();
         Task<List<Comment>> GetAllComments(Guid? userGuid = null);
         Task<RepositoryResponse<BookExtended>> AddComment(Comment comment);
-        Task<RepositoryResponse<Comment>> DeleteComment(Comment comment);
+        Task<RepositoryResponse<Comment>> DeleteComment(Comment comment, Guid? userGuid);
+        Task<List<Comment>> GetMyComments(Guid? userGuid);
     }
 }

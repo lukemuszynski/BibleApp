@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BibliaApp;
 using System.Linq;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using BibleAppApi.Models;
 using BibleAppCore.Contracts.Contract.ViewModel;
 using Microsoft.EntityFrameworkCore;
@@ -51,7 +52,7 @@ namespace BibleAppCore.DataLayer.Repository
             List<CommentDomainObject> comments;
             if (userGuid != null)
             {
-                comments = await DbContext.Comments.Where(x=> x.IsPrivate == false || x.UserGuid == userGuid).ToListAsync();
+                comments = await DbContext.Comments.Where(x => x.IsPrivate == false || x.UserGuid == userGuid).ToListAsync();
             }
             else
             {
@@ -88,14 +89,18 @@ namespace BibleAppCore.DataLayer.Repository
             return repositoryResponse;
         }
 
-        public async Task<RepositoryResponse<Comment>> DeleteComment(Comment comment)
+        public async Task<RepositoryResponse<Comment>> DeleteComment(Comment comment, Guid? userGuid)
         {
+            if (userGuid == null)
+            {
+                throw new AccessViolationException();
+            }
             RepositoryResponse<Comment> repositoryResponse = new RepositoryResponse<Comment>();
             try
             {
                 var commentToDelete =
                     await DbContext.Comments.FirstOrDefaultAsync(
-                        x => x.Guid == comment.Guid && x.ManageCommentKeyGuid == comment.ManageCommentKeyGuid);
+                        x => x.Guid == comment.Guid && x.UserGuid == userGuid);
                 repositoryResponse.Value = Mapper.Map<Comment>(commentToDelete);
                 if (commentToDelete != null)
                 {
@@ -112,6 +117,11 @@ namespace BibleAppCore.DataLayer.Repository
             }
 
             return repositoryResponse;
+        }
+
+        public async Task<List<Comment>> GetMyComments(Guid? userGuid)
+        {
+           return await DbContext.Comments.Where(x => x.UserGuid == (userGuid ?? Guid.Empty)).ProjectTo<Comment>().ToListAsync();
         }
     }
 }

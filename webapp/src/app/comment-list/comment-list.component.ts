@@ -1,7 +1,8 @@
+import { ActivatedRoute } from '@angular/router';
 import { AuthService } from './../services/auth-service/auth.service';
 import { MatSnackBar } from '@angular/material';
 import { BookService } from './../services/book-service/book.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { CommentDomainObject } from '../models/CommentDomainObject';
 import { CustomMaterialModule } from '../custom-material/custom-material.module';
 
@@ -12,14 +13,17 @@ import { CustomMaterialModule } from '../custom-material/custom-material.module'
 })
 export class CommentListComponent implements OnInit {
 
-    constructor(private _bookService: BookService, public snackBar: MatSnackBar, private authService: AuthService) { }
+    constructor(private _bookService: BookService, public snackBar: MatSnackBar, public authService: AuthService,
+        private route: ActivatedRoute) { }
     step = 0;
+    @Input()
     comments: CommentDomainObject[] = [];
 
     async ngOnInit() {
-
-        this.comments = await this._bookService.getComments();
-
+        console.log(this.route);
+        if (this.route.component['name'] !== 'MyCommentsComponent') {
+            this.comments = await this._bookService.getComments();
+        }
     }
     setStep(index: number) {
         this.step = index;
@@ -45,7 +49,6 @@ export class CommentListComponent implements OnInit {
     async deleteComment(comment: CommentDomainObject) {
         const commentToDelete = new CommentDomainObject();
         commentToDelete.Guid = comment.Guid;
-        commentToDelete.ManageCommentKeyGuid = comment.ManageCommentKeyGuid;
         const response = await this._bookService.deleteComment(commentToDelete);
         if (response) {
             this.comments = this.comments.filter(x => x.Guid !== commentToDelete.Guid);

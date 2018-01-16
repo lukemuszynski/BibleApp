@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
   selectedBook: Book;
   selectedSubbook: BookDomainObject;
 
-  constructor(private bookService: BookService, private route: ActivatedRoute, private authService: AuthService,
+  constructor(private bookService: BookService, private route: ActivatedRoute, public authService: AuthService,
     public dialog: MatDialog
   ) {
 

@@ -17,6 +17,7 @@ import { LoginComponent } from './login/login.component';
 import { AuthService } from './services/auth-service/auth.service';
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { NotificationsService } from './services/notifications-service/notifications.service';
+import { MyCommentsComponent } from './my-comments/my-comments.component';
 
 const appRoutes: Routes = [
   {
@@ -39,6 +40,10 @@ const appRoutes: Routes = [
   {
     path: 'Authentication',
     component: AuthenticationComponent
+  },
+  {
+    path: 'MyComments',
+    component: MyCommentsComponent
   }
 ];
 
@@ -50,7 +55,8 @@ const appRoutes: Routes = [
     CommentListComponent,
     RegisterComponent,
     LoginComponent,
-    AuthenticationComponent
+    AuthenticationComponent,
+    MyCommentsComponent
   ],
   imports: [
     CustomMaterialModule,

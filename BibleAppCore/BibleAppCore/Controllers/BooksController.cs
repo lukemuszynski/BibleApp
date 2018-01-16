@@ -26,7 +26,10 @@ namespace BibleAppCore.Controllers
         [HttpGet("GetBook/{guid}")]
         public async Task<BookExtended> GetBook(Guid guid)
         {
-            BookExtended ret = await Repository.GetBookByGuid(guid, GetUserGuid());
+            BookExtended ret = await Repository.GetBookByGuid(guid, UserGuid);
+            Guid userGuid = UserGuid ?? Guid.Empty;
+            if (userGuid != Guid.Empty)
+                ret.Comments.ForEach(x => x.IsMyComment = x.UserGuid == userGuid);
             return ret;
         }
 

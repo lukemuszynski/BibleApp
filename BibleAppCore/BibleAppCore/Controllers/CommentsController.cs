@@ -25,13 +25,19 @@ namespace BibleAppCore.Controllers
         [HttpGet("GetComments")]
         public async Task<List<Comment>> GetAllComments()
         {
-
-            List<Comment> comments = await Repository.GetAllComments(GetUserGuid());
-
-            comments.ForEach(x => x.ManageCommentKeyGuid = Guid.Empty);
-
+            List<Comment> comments = await Repository.GetAllComments(UserGuid);
+            Guid guid = UserGuid ?? Guid.Empty;
+            if(guid != Guid.Empty)
+            comments.ForEach(x => x.IsMyComment = x.UserGuid == guid);
             return comments;
+        }
 
+        [HttpGet("GetMyComments"), Authorize]
+        public async Task<List<Comment>> GetMyComments()
+        {
+            List<Comment> comments = await Repository.GetMyComments(UserGuid);
+            comments.ForEach(x => x.IsMyComment = true);
+            return comments;
         }
 
         [HttpPost("AddComment"), Authorize]
@@ -39,7 +45,7 @@ namespace BibleAppCore.Controllers
         {
             
             string login = User.Claims.FirstOrDefault(x => x.Type == "login")?.Value;
-            comment.UserGuid = GetUserGuid() ?? Guid.Empty;
+            comment.UserGuid = UserGuid ?? Guid.Empty;
             comment.UserLogin = login;
             
             if (!string.IsNullOrEmpty(comment.Url))
@@ -83,7 +89,7 @@ namespace BibleAppCore.Controllers
         [HttpPost("DeleteComment"), Authorize]
         public async Task<StatusCodeResult> DeleteComment([FromBody]Comment comment)
         {
-            RepositoryResponse<Comment> repositoryResponse = await Repository.DeleteComment(comment);
+            RepositoryResponse<Comment> repositoryResponse = await Repository.DeleteComment(comment, UserGuid);
             if (repositoryResponse.RepositoryResponseMessage == RepositoryResponse<Comment>.RepositoryResponseMessageEnum.NotFound)
                 return new NotFoundResult();
             else if (!repositoryResponse.Successful)

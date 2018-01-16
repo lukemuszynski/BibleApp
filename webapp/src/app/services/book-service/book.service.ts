@@ -18,6 +18,7 @@ export class BookService {
   addCommentUrl = environment.apiUrl + 'api/Comments/AddComment';
   deleteCommentUrl = environment.apiUrl + 'api/Comments/DeleteComment';
   getCommentsListUrl = environment.apiUrl + 'api/Comments/GetComments';
+  getMyCommentsListUrl = environment.apiUrl + 'api/Comments/GetMyComments';
 
   private books: Book[] = [];
 
@@ -28,7 +29,6 @@ export class BookService {
   }
 
   async getComments(): Promise<CommentDomainObject[]> {
-
     let request;
     if (this.authService.IsAuthorized) {
       const bearer = 'Bearer ' + this.authService.GetToken();
@@ -38,6 +38,28 @@ export class BookService {
     } else {
       request = this.http.get(this.getCommentsListUrl);
     }
+    const response = (await request.toPromise()).json();
+    // tslint:disable-next-line:no-shadowed-variable
+    response.forEach(element => {
+      this.books.find(x => {
+        const subBook = x.Subbooks.find(y => y.Guid === element.BookGuid);
+        if (subBook) {
+          element.BookName = subBook.BookName;
+          return true;
+        }
+        return false;
+      });
+    });
+    return response;
+  }
+
+  async getMyComments(): Promise<CommentDomainObject[]> {
+    let request;
+    const bearer = 'Bearer ' + this.authService.GetToken();
+    const headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': bearer });
+    const options = new RequestOptions({ headers: headers });
+    request = this.http.get(this.getMyCommentsListUrl, options);
+
     const response = (await request.toPromise()).json();
     // tslint:disable-next-line:no-shadowed-variable
     response.forEach(element => {
@@ -76,7 +98,8 @@ export class BookService {
   }
 
   async deleteComment(comment: CommentDomainObject): Promise<boolean> {
-    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const bearer = 'Bearer ' + this.authService.GetToken();
+    const headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': bearer });
     const options = new RequestOptions({ headers: headers });
     const response = await this.http.post(this.deleteCommentUrl, JSON.stringify(comment), options).toPromise();
     if (response.status === 200) {

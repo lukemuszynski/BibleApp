@@ -20,5 +20,6 @@ namespace BibleAppCore.Contracts.Contract.ViewModel
         public string UserLogin { get; set; }
         public Guid UserGuid { get; set; }
         public bool IsPrivate { get; set; }
+        public bool IsMyComment { get; set; }
     }
 }

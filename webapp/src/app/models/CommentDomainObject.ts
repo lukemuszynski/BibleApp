@@ -13,4 +13,5 @@ export class CommentDomainObject {
     UserGuid: String;
     UserLogin: String;
     BookName: String;
+    IsMyComment: boolean;
 }

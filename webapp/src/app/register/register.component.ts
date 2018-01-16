@@ -23,7 +23,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 export class RegisterComponent implements OnInit {
 
-  constructor(private authService: AuthService, private dialogRef: MatDialogRef<AuthenticationComponent>, private snackBar: MatSnackBar) { }
+  constructor(public authService: AuthService, private dialogRef: MatDialogRef<AuthenticationComponent>, private snackBar: MatSnackBar) { }
   hash = '';
 
   // https://www.jokecamp.com/blog/angular-whitespace-validator-directive/
